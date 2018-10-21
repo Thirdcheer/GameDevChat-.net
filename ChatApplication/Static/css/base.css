@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+body {
+    line-height: 1;
+    font-family: Nunito, sans-serif;
+}
+html, body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden
+}
+
+.container-fluid{
+    height: 100vh;
+    overflow: hidden;
+    padding: 0;
+}

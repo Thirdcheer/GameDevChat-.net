@@ -1,0 +1,153 @@
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\ApplicationInsights.config
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\roslyn\csc.exe
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\roslyn\vbc.exe
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\roslyn\VBCSCompiler.exe
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\ChatApplication.dll.config
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\ChatApplication.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\ChatApplication.pdb
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\Antlr3.Runtime.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\Microsoft.AI.Web.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\Microsoft.ApplicationInsights.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\Newtonsoft.Json.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\System.Web.Helpers.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\System.Web.Mvc.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\System.Web.Optimization.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\System.Web.Razor.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\System.Web.WebPages.Deployment.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\System.Web.WebPages.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\System.Web.WebPages.Razor.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\WebGrease.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\Microsoft.AI.Web.xml
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\Microsoft.ApplicationInsights.xml
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\System.Web.Helpers.xml
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\System.Web.Mvc.xml
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\System.Web.Optimization.xml
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\System.Web.Razor.xml
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\System.Web.WebPages.xml
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\System.Web.WebPages.Deployment.xml
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\System.Web.WebPages.Razor.xml
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\Antlr3.Runtime.pdb
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\Newtonsoft.Json.xml
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\obj\Debug\ChatApplication.csprojResolveAssemblyReference.cache
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\obj\Debug\ChatApplication.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\obj\Debug\ChatApplication.pdb
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\Microsoft.Diagnostics.Tracing.EventSource.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\RabbitMQ.Client.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\Microsoft.Diagnostics.Tracing.EventSource.xml
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\RabbitMQ.Client.xml
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\Npgsql.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\Mono.Security.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\Npgsql.pdb
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\Npgsql.xml
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\de\Npgsql.resources.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\es\Npgsql.resources.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\fi\Npgsql.resources.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\fr\Npgsql.resources.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\ja\Npgsql.resources.dll
+C:\Users\jayesh\Desktop\17-01-18\ChatApplication\ChatApplication\bin\zh-CN\Npgsql.resources.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\ApplicationInsights.config
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\roslyn\csc.exe
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\roslyn\vbc.exe
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\roslyn\VBCSCompiler.exe
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\ChatApplication.dll.config
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\ChatApplication.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\ChatApplication.pdb
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Antlr3.Runtime.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Microsoft.AI.Web.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Microsoft.ApplicationInsights.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Microsoft.Diagnostics.Tracing.EventSource.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Newtonsoft.Json.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\RabbitMQ.Client.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\System.Web.Helpers.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\System.Web.Mvc.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\System.Web.Optimization.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\System.Web.Razor.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\System.Web.WebPages.Deployment.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\System.Web.WebPages.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\System.Web.WebPages.Razor.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\WebGrease.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Mono.Security.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Microsoft.AI.Web.xml
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Microsoft.ApplicationInsights.xml
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Microsoft.Diagnostics.Tracing.EventSource.xml
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Npgsql.pdb
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Npgsql.xml
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\RabbitMQ.Client.xml
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\System.Web.Helpers.xml
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\System.Web.Mvc.xml
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\System.Web.Optimization.xml
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\System.Web.Razor.xml
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\System.Web.WebPages.xml
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\System.Web.WebPages.Deployment.xml
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\System.Web.WebPages.Razor.xml
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Antlr3.Runtime.pdb
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Newtonsoft.Json.xml
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\de\Npgsql.resources.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\es\Npgsql.resources.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\fi\Npgsql.resources.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\fr\Npgsql.resources.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\ja\Npgsql.resources.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\zh-CN\Npgsql.resources.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\obj\Debug\ChatApplication.csprojAssemblyReference.cache
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\obj\Debug\ChatApplication.csproj.CoreCompileInputs.cache
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\obj\Debug\ChatApplication.csproj.CopyComplete
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\obj\Debug\ChatApplication.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\obj\Debug\ChatApplication.pdb
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\EntityFramework.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\EntityFramework.NuoDb.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\EntityFramework.SqlServer.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\NuoDb.Data.Client.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\NuoDb.Web.Security.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\EntityFramework.xml
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\EntityFramework.SqlServer.xml
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Microsoft.AspNet.SignalR.Core.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Microsoft.AspNet.SignalR.SystemWeb.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Microsoft.Owin.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Microsoft.Owin.Host.SystemWeb.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Microsoft.Owin.Security.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Owin.dll
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Microsoft.AspNet.SignalR.Core.xml
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Microsoft.AspNet.SignalR.SystemWeb.xml
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Microsoft.Owin.xml
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Microsoft.Owin.Host.SystemWeb.xml
+C:\Users\karol\Desktop\ChatApplication\Chat Application\ChatApplication\bin\Microsoft.Owin.Security.xml

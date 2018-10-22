@@ -5,40 +5,58 @@ using System.Web;
 using System.Web.Mvc;
 using ChatApplication.Models;
 using System.Web.UI.WebControls;
+using System.Web.Security;
 
 namespace ChatApplication.Controllers
 {
     public class HomeController : Controller
     {
         DataLayer dl = new DataLayer();
-        // GET: Home
+
+        [Authorize]
         public ActionResult Index()
         {
-            if (Session["userid"]==null)
-            {
-                return RedirectToAction("login");
-            }
-            else
-            {
-                return View();
-            }
+            ViewBag.Username = System.Web.HttpContext.Current.User.Identity.Name;
+            return View();  
         }
        
         public ActionResult login()
         {
-
-            return View();
+            if (!User.Identity.IsAuthenticated)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
+
+        public ActionResult register()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
         [HttpPost]
         public ActionResult login(FormCollection fc)
         {
-            string email = fc["txtemail"].ToString();
-            string password = fc["txtpassword"].ToString();
-            UserModel user = dl.login(email, password);
+            string username = fc["username"].ToString();
+            string password = fc["password"].ToString();
+            UserModel user = dl.login(username, password);
+
             if (user.userid > 0)
             {
                 ViewData["status"] = 1;
                 ViewData["msg"] = "login Successful...";
+                ViewBag.Username = user.username;
+                FormsAuthentication.SetAuthCookie(username, false);
                 Session["username"] = user.username;
                 Session["userid"] = user.userid.ToString();
                 return RedirectToAction("Index");
@@ -53,6 +71,34 @@ namespace ChatApplication.Controllers
 
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult register(FormCollection fc)
+        {
+            string email = fc["email"].ToString();
+            string username = fc["username"].ToString();
+            string password = fc["password"].ToString();
+
+            UserModel user = dl.register(username, email, password);
+            
+            if (user != null)
+            {
+                ViewData["status"] = 1;
+                ViewData["msg"] = "user registered";
+                Session["username"] = user.username;
+                Session["userid"] = user.userid.ToString();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ViewData["status"] = 2;
+                ViewData["msg"] = "User with that email already exists";
+                return View();
+            }
+
+        }
+
+        [Authorize]
         [HttpPost]
         public JsonResult friendlist()
         {

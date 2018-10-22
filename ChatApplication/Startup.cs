@@ -2,6 +2,9 @@
 using System.Threading.Tasks;
 using Microsoft.Owin;
 using Owin;
+using Microsoft.AspNet.Identity;
+using System.Web.Helpers;
+using System.Security.Claims;
 
 [assembly: OwinStartup(typeof(ChatApplication.Startup))]
 
@@ -13,5 +16,8 @@ namespace ChatApplication
         {
             app.MapSignalR();
         }
+
+
+        
     }
 }

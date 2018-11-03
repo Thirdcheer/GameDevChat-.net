@@ -20,6 +20,11 @@ namespace ChatApplication.Controllers
             return View();  
         }
        
+        public ActionResult serverjoin()
+        {
+            return View();
+        }
+
         public ActionResult login()
         {
             if (!User.Identity.IsAuthenticated)
@@ -87,7 +92,8 @@ namespace ChatApplication.Controllers
                 ViewData["msg"] = "user registered";
                 Session["username"] = user.username;
                 Session["userid"] = user.userid.ToString();
-                return RedirectToAction("Index");
+                FormsAuthentication.SetAuthCookie(username, false);
+                return RedirectToAction("serverjoin", "Home");
             }
             else
             {
@@ -96,6 +102,26 @@ namespace ChatApplication.Controllers
                 return View();
             }
 
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult serverjoin(FormCollection fc)
+        {
+
+            UserModel user = dl.getUser(User.Identity.Name);
+
+            if (fc.AllKeys.Contains("name"))
+            {
+                ServerModel server = dl.addServer(fc["name"], user);
+                if(server != null)
+                {
+                    ViewData["status"] = 1;
+                    ViewData["msg"] = "server added";
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+            return View();
         }
 
         [Authorize]

@@ -1,0 +1,54 @@
+﻿@{
+    Layout = null;}
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>login</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <link rel="stylesheet" runat="server" media="screen" href="~/Content/css/base.css" />
+    <link rel="stylesheet" runat="server" media="screen" href="~/Content/css/registration_forms.css" />
+    <link rel="stylesheet" runat="server" media="screen" href="~/Content/css/sidebar.css" />
+</head>
+<body>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <section class="login-block">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 login-section">
+                        <h2 class="text-center">Create server...</h2>
+                        <form class="login-form" method="post">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" name="name" class="form-control" required />
+                            </div>
+                            <div class="form-check">
+                                <button type="submit" class="btn btn-login float-right">Create</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-6 login-section">
+                        <h2 class="text-center">or join one!</h2>
+                        <form class="login-form" method="post">
+                            <div class="form-group">
+                                <label for="joinString">Server join string</label>
+                                <input type="text" id="joinstring" name="joinstring" class="form-control" required />
+                            </div>
+                            <div class="form-check">
+                                <button type="submit" class="btn btn-login float-right">Join</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+</body>
+</html>

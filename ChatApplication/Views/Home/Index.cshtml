@@ -194,19 +194,26 @@
                 $('#onlineusers').append('<li class="online-user">' + name + '</li>');
             };
             chat.client.broadcastMessage = function (name, message) {
-                if (name == username) {
-                    $('#chatlog').append('<div class="row px-4">' +
-                        '<div class="container">' +
-                        '<span class="username-right">' + name + '</span>' +
-                        '<p class= "dark" >' + message + '<br><br> <span class="time-right small">' + currentTime +
-                        '</span></p></div></div>');
-                }
-                else {
-                    $('#chatlog').append('<div class="row px-4">' +
-                        '<div class="container">' +
-                        '<span class="username">' + name + '</span>' +
-                        '<p class= "light" >' + message + '<br><br> <span class="time-left small">' + currentTime +
-                        '</span></p></div></div>');
+                if (message != "") {
+                    if (name == username) {
+                        $('#chatlog').append('<div class="row px-4">' +
+                            '<div class="container">' +
+                            '<span class="username-right">' + name + '</span>' +
+                            '<p class= "dark" >' + message + '<br><br> <span class="time-right small">' + currentTime +
+                            '</span></p></div></div>');
+
+                        var element = document.getElementById("chatlog");
+                        element.scrollTop = element.scrollHeight - element.clientHeight;
+                    }
+                    else {
+                        $('#chatlog').append('<div class="row px-4">' +
+                            '<div class="container">' +
+                            '<span class="username">' + name + '</span>' +
+                            '<p class= "light" >' + message + '<br><br> <span class="time-left small">' + currentTime +
+                            '</span></p></div></div>');
+                    }
+                    var element = document.getElementById("chatlog");
+                    element.scrollTop = element.scrollHeight - element.clientHeight;
                 }
             };
 

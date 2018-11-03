@@ -14,5 +14,7 @@ namespace ChatApplication.Models
         public string password { get; set; }
         
         public string confirmpassword { get; set; }
+
+        public string role { get; set; }
     }
 }

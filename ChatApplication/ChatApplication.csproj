@@ -394,6 +394,7 @@
     </Compile>
     <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Models\DataLayer.cs" />
+    <Compile Include="Models\RoomModel.cs" />
     <Compile Include="Models\ServerModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\UserRole.cs" />

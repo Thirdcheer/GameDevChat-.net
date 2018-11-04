@@ -38,6 +38,12 @@ namespace ChatApplication.Controllers
             }
         }
 
+        public ActionResult Logout()
+        {
+            FormsAuthentication.SignOut();
+            return RedirectToAction("Login");
+        }
+
         public ActionResult register()
         {
             if (!User.Identity.IsAuthenticated)

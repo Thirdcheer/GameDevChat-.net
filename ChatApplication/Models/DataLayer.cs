@@ -76,13 +76,15 @@ namespace ChatApplication.Models
             }
         }
 
-        public ServerModel addServer(string name, UserModel user)
+        public ServerModel addServer(string name, string username)
         {
             ServerModel server = new ServerModel(name);
             DataTable dt = new DataTable();
             DataSet ds = new DataSet();
             string sql = String.Format("select 1 from {0} where name='{1}'", server_table, name);
             NuoDbDataAdapter da = new NuoDbDataAdapter(sql, con);
+
+            UserModel user = getUser(username);
 
             ds.Reset();
             da.Fill(ds);
@@ -141,6 +143,63 @@ namespace ChatApplication.Models
             }
 
             return user;
+        }
+
+        public string getServerName(string user)
+        {
+            
+            DataTable dt = new DataTable();
+            DataSet ds = new DataSet();
+            string sql = String.Format("select name from {0} join {1} on {0}.id = {1}.serverid join {2} on {1}.userid = {2}.id where users.username = '{3}'", server_table, server_user_table, login_table, user);
+
+            NuoDbDataAdapter da = new NuoDbDataAdapter(sql, con);
+            ds.Reset();
+            da.Fill(ds);
+            dt = ds.Tables[0];
+
+            string serverName = "";
+            foreach(DataRow  row in dt.Rows)
+            {
+                serverName = row["name"].ToString();
+            }
+
+            return serverName;
+        }
+
+        public ServerModel joinServer(string joinstring, string username)
+        {
+            ServerModel server = new ServerModel();
+            DataTable dt = new DataTable();
+            DataSet ds = new DataSet();
+            string sql = String.Format("select * from {0} where joinstring='{1}'", server_table, joinstring);
+            NuoDbDataAdapter da = new NuoDbDataAdapter(sql, con);
+
+            UserModel user = getUser(username);
+
+
+            ds.Reset();
+            da.Fill(ds);
+            dt = ds.Tables[0];
+
+            if (dt.Rows.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                foreach (DataRow row in dt.Rows)
+                {
+                    server.id = Convert.ToInt32(row["id"]);
+                    server.name = row["name"].ToString();
+                }
+
+                NuoDbCommand nuocmd = new NuoDbCommand(String.Format("insert {0} (serverid, userid) values ('{1}', '{2}')", server_user_table, server.id, user.userid), con);
+                con.Open();
+                nuocmd.ExecuteNonQuery();
+                con.Close();
+
+                return server;
+            }
         }
 
         public List<UserModel> getusers(int id)

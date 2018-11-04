@@ -17,6 +17,7 @@ namespace ChatApplication.Controllers
         public ActionResult Index()
         {
             ViewBag.Username = System.Web.HttpContext.Current.User.Identity.Name;
+            ViewBag.Servername = dl.getServerName(ViewBag.username);
             return View();  
         }
        
@@ -108,18 +109,22 @@ namespace ChatApplication.Controllers
         [HttpPost]
         public ActionResult serverjoin(FormCollection fc)
         {
-
-            UserModel user = dl.getUser(User.Identity.Name);
-
             if (fc.AllKeys.Contains("name"))
             {
-                ServerModel server = dl.addServer(fc["name"], user);
+                ServerModel server = dl.addServer(fc["name"], User.Identity.Name);
                 if(server != null)
                 {
                     ViewData["status"] = 1;
                     ViewData["msg"] = "server added";
                     return RedirectToAction("Index", "Home");
                 }
+            }
+            else if (fc.AllKeys.Contains("joinstring"))
+            {
+                ServerModel server = dl.joinServer(fc["joinstring"], User.Identity.Name);
+                ViewData["status"] = 1;
+                ViewData["msg"] = "joined to server " + server.name;
+                return RedirectToAction("Index", "Home");
             }
             return View();
         }
@@ -142,10 +147,5 @@ namespace ChatApplication.Controllers
             }
             return Json(userlist);
         }
-
-
-
-
-
     }
 }

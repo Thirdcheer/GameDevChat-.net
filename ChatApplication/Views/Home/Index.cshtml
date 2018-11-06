@@ -33,7 +33,7 @@
                     </span>
 
                     <span class="logout-link">
-                        <a href="@Url.Action("Logout", "Home")">Logout</a>
+                        <a id="logout" href="@Url.Action("Logout", "Home")">Logout</a>
                     </span>
                 </div>
             </div>
@@ -229,11 +229,14 @@
                 }
             });
 
-            chat.client.disconnected = function (name) {
-                $('#chatlog').append('<div class="text-infos"' + name + ' leaves the conversation</div>');
+            chat.client.disconnect = function (name) {
+                $('#chatlog').append('<div class="text-infos">' + name + ' leaves the conversation</div>');
                 $('#onlineusers li').remove(":contains('" + name + "')");
                 $("#users option").remove(":contains('" + name + "')");
-            }
+            };
+
+            
+
             $.connection.hub.start().done(function () {
                 chat.server.notify($('#nickname').val(), $.connection.hub.id);
                 $('#btn-send').click(function () {
@@ -245,6 +248,11 @@
                     }*/
                     $('#message').val('').focus();
                 });
+
+                $('#logout').click(function () {
+                    chat.connection.stop();
+                });
+
             });
         }
 

@@ -224,15 +224,39 @@ namespace ChatApplication.Models
             }
         }
 
+        public List<string> getRoomsNames(string serverName)
+        {
+            ServerModel server = getServer(serverName);
+            UserModel user = new UserModel();
+            DataTable dt = new DataTable();
+            DataSet ds = new DataSet();
+
+            string sql = String.Format("select name from {0} where serverid='{1}'", room_table, server.id);
+            NuoDbDataAdapter da = new NuoDbDataAdapter(sql, con);
+            List<string> roomNames = new List<string>();
+            RoomModel room = new RoomModel();
+            ds.Reset();
+            da.Fill(ds);
+            dt = ds.Tables[0];
+
+            foreach (DataRow row in dt.Rows)
+            {
+                roomNames.Add(row["name"].ToString());
+            }
+
+            return roomNames;
+        }
+
        public RoomModel addRoom(string name, string serverName, int capacity)
        {
             ServerModel server = getServer(serverName);
             UserModel user = new UserModel();
             DataTable dt = new DataTable();
             DataSet ds = new DataSet();
+
             string sql = String.Format("select name from {0} where serverid='{1}'", room_table, server.id);
             NuoDbDataAdapter da = new NuoDbDataAdapter(sql, con);
-            List<string> roomNames = new List<string>();
+            List<string> roomNames = getRoomsNames(serverName);
             RoomModel room = new RoomModel();
             ds.Reset();
             da.Fill(ds);

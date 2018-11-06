@@ -13,10 +13,18 @@ namespace ChatApplication.Hubs
     {
 
         static ConcurrentDictionary<string, string> dic = new ConcurrentDictionary<string, string>();
+        ChatRooms rooms;
 
-        public Task JoinRoom(string roomName)
+        public void getRooms(string servername)
         {
-            return Groups.Add(Context.ConnectionId, roomName);
+            rooms = new ChatRooms(servername);
+
+        }
+        
+        public async Task Join(string roomName)
+        {
+            await Groups.Add(Context.ConnectionId, roomName);
+            Clients.Group(roomName).addChatMessage(Context.User.Identity.Name + " joined.");
         }
 
         public Task LeaveRoom(string roomName)
@@ -24,10 +32,10 @@ namespace ChatApplication.Hubs
             return Groups.Remove(Context.ConnectionId, roomName);
         }
 
-
-        public void Send(string name, string message)
+        public void Send(string name, string message, string roomname)
         {
-            Clients.All.broadcastMessage(name, message);
+            Trace.WriteLine("From: " + name + " message: " + message + " in " + roomname);
+            Clients.Group(roomname).broadcastMessage(name, message, roomname);
         }
 
         public void SendToSpecific(string name, string message, string to)
@@ -36,7 +44,7 @@ namespace ChatApplication.Hubs
             Clients.Client(dic[to]).broadcastMessage(name, message);
         }
 
-        public void Notify(string name, string id)
+        public void Notify(string name, string id, string roomname)
         {
             var exists = dic.FirstOrDefault(x => x.Key == name);
             if (exists.Key == null)
@@ -46,7 +54,7 @@ namespace ChatApplication.Hubs
                 {
                     Clients.Caller.online(entry.Key);
                 }
-                Clients.Others.enters(name);
+                Clients.Group(roomname).enters(name);
             }
         }
 

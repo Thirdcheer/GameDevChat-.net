@@ -164,21 +164,27 @@
         $(function () {
             startChatHub();
         });
+        
 
         function startChatHub() {
             var chat = $.connection.chatHub;
             var username = "@ViewBag.Username";
-            var currentDate = new Date();
-            var currentTime = currentDate.getHours() + ":"
-                + currentDate.getMinutes() + ":"
-                + currentDate.getSeconds();
 
+           
             $('#nickname').val(username);
 
             $.connection.hub.start().done(function () {
                 chat.server.notify($('#nickname').val(), $.connection.hub.id);
             });
 
+            getTime = function () {
+                var currentDate = new Date();
+                var currentTime = currentDate.getHours() + ":"
+                    + currentDate.getMinutes() + ":"
+                    + currentDate.getSeconds();
+                return currentTime;
+            };
+            
             chat.client.online = function (name) {
                 if (name == $('#nickname').val()) {
                     $('#onlineusers').append('<li class="online-user you">You: ' + name + '</li>');
@@ -193,13 +199,13 @@
                 $("#users").append('<option value="' + name + '">' + name + '</option>');
                 $('#onlineusers').append('<li class="online-user">' + name + '</li>');
             };
-            chat.client.broadcastMessage = function (name, message) {
+            chat.client.broadcastMessage = function (name, message, roomname) {
                 if (message != "") {
                     if (name == username) {
                         $('#chatlog').append('<div class="row px-4">' +
                             '<div class="container">' +
                             '<span class="username-right">' + name + '</span>' +
-                            '<p class= "dark" >' + message + '<br><br> <span class="time-right small">' + currentTime +
+                            '<p class= "dark" >' + message + '<br><br> <span class="time-right small">' + getTime() +
                             '</span></p></div></div>');
 
                         var element = document.getElementById("chatlog");
@@ -209,7 +215,7 @@
                         $('#chatlog').append('<div class="row px-4">' +
                             '<div class="container">' +
                             '<span class="username">' + name + '</span>' +
-                            '<p class= "light" >' + message + '<br><br> <span class="time-left small">' + currentTime +
+                            '<p class= "light" >' + message + '<br><br> <span class="time-left small">' + getTime() +
                             '</span></p></div></div>');
                     }
                     var element = document.getElementById("chatlog");
@@ -220,7 +226,7 @@
             $('#chatarea').find("input").on("keydown", function (e) {
                 if (e.which == 13) {
                     //if ($("#users").val() == "All") {
-                    chat.server.send($('#nickname').val(), $('#message').val());
+                    chat.server.send($('#nickname').val(), $('#message').val(), "general" +"@ViewBag.Servername");
                     /*}
                     else {
                         chat.server.sendToSpecific($('#nickname').val(), $('#message').val(), $("#users").val());
@@ -238,10 +244,13 @@
             
 
             $.connection.hub.start().done(function () {
-                chat.server.notify($('#nickname').val(), $.connection.hub.id);
+                chat.server.getRooms("@ViewBag.Servername");
+                chat.server.join("general" +"@ViewBag.Servername");
+                chat.server.notify($('#nickname').val(), $.connection.hub.id, "general" +"@ViewBag.Servername");
+
                 $('#btn-send').click(function () {
                     //if ($("#users").val() == "All") {
-                        chat.server.send($('#nickname').val(), $('#message').val());
+                        chat.server.send($('#nickname').val(), $('#message').val(), "general" +"@ViewBag.Servername");
                     /*}
                     else {
                         chat.server.sendToSpecific($('#nickname').val(), $('#message').val(), $("#users").val());

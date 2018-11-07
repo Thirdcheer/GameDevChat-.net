@@ -146,16 +146,7 @@
             </div>
 
             <div id="chats">
-                <input type="hidden" id="nickname" />
-                <div id="chatarea" class="room">
-                    <div class="room-name">#general</div>
-                    <div class="messages" id="chatlog">
-                    </div>
-                    <div class="message-input row" style="position:relative">
-                        <input type="text" id="message" class="col-md-11" spellcheck="true" autofocus placeholder="Write your message..." />
-                        <button class="submit btn btn-send col-md-1" id="btn-send"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
-                    </div>
-                </div>
+                <input type='hidden' id='nickname' />
             </div>
         </div>
     </main>
@@ -210,8 +201,10 @@
             };
             chat.client.broadcastMessage = function (name, message, roomname) {
                 if (message != "") {
+                    console.log(roomname);
+
                     if (name == username) {
-                        $('#chatlog').append('<div class="row px-4">' +
+                        $("." + (roomname.replace("@ViewBag.Servername", "") + " #chatlog")).append('<div class="row px-4">' +
                             '<div class="container">' +
                             '<span class="username-right">' + name + '</span>' +
                             '<p class= "dark" >' + message + '<br><br> <span class="time-right small">' + getTime() +
@@ -221,28 +214,18 @@
                         element.scrollTop = element.scrollHeight - element.clientHeight;
                     }
                     else {
-                        $('#chatlog').append('<div class="row px-4">' +
+                        $("." + (roomname.replace("@ViewBag.Servername", "") + " #chatlog")).append('<div class="row px-4">' +
                             '<div class="container">' +
                             '<span class="username">' + name + '</span>' +
                             '<p class= "light" >' + message + '<br><br> <span class="time-left small">' + getTime() +
                             '</span></p></div></div>');
                     }
-                    var element = document.getElementById("chatlog");
+
+                    console.log("Message broadcasted to: " + roomname.replace("@ViewBag.Servername", ""));
+                    var element =  $("." + (roomname.replace("@ViewBag.Servername", "") + " #chatlog"));
                     element.scrollTop = element.scrollHeight - element.clientHeight;
                 }
             };
-
-            $('#chatarea').find("input").on("keydown", function (e) {
-                if (e.which == 13) {
-                    //if ($("#users").val() == "All") {
-                    chat.server.send($('#nickname').val(), $('#message').val(), "general" +"@ViewBag.Servername");
-                    /*}
-                    else {
-                        chat.server.sendToSpecific($('#nickname').val(), $('#message').val(), $("#users").val());
-                    }*/
-                    $('#message').val('').focus();
-                }
-            });
 
             chat.client.disconnect = function (name) {
                 $('#chatlog').append('<div class="text-infos">' + name + ' leaves the conversation</div>');
@@ -251,36 +234,70 @@
             };
 
             fillRooms = function () {
-                $('#rooms').append("@foreach (var room in ViewBag.Rooms){<li><a href='#' id='room-link'>" + "@room".replace("-@ViewBag.Servername", "")  +"</a></li>}");
+                $('#rooms').append("@foreach (var room in ViewBag.Rooms) {<li><a href='#' class='room-link' id='@room'>" + "@room.Replace("-" + ViewBag.Servername.ToString(), "")"  +"</a></li>}");
                 $('#rooms').append("<li><a href='#' id='new-room'>Create new room</a></li>");
             };
 
+            makeRooms = function () {
+                $('#chats').append("@foreach (var room in ViewBag.Rooms) {<div hidden id='chatarea' class='room @room.Replace("-" + ViewBag.Servername.ToString(), "")'><div class='room-name'>#@room.Replace("-" + ViewBag.Servername.ToString(), "")</div><div class='messages' id='chatlog'></div > <div class='message-input row' style='position:relative'><input type='text' id='message' class='col-md-11 message' spellcheck='true' autofocus placeholder='Write your message...' /><button class='submit btn btn-send col-md-1' id='btn-send'><i class='fa fa-paper-plane' aria-hidden='true'></i></button></div></div>}");
+            }
+
             $.connection.hub.start().done(function () {
                 var current_room = "general" + "@ViewBag.Servername";
+                makeRooms();
+                var x = document.getElementsByClassName(current_room.replace("@ViewBag.Servername", ""));
+
+                console.log("Looking for class " + current_room.replace("@ViewBag.Servername", ""))
+                for (i = 0; i < x.length; i++) {
+                    x[i].removeAttribute('hidden');
+                    console.log("Removed hidden");
+                }
                 chat.server.getRooms("@ViewBag.Servername");
                 fillRooms();
                 chat.server.join(current_room);
                 chat.server.notify($('#nickname').val(), $.connection.hub.id, current_room);
 
-                $('#btn-send').click(function () {
+                console.log("Current in room: " + current_room);
+
+                $('.room').find('#btn-send').click(function () {
                     //if ($("#users").val() == "All") {
-                        chat.server.send($('#nickname').val(), $('#message').val(), current_room);
+                        chat.server.send($('#nickname').val(), $('.message').val(), current_room);
                     /*}
                     else {
                         chat.server.sendToSpecific($('#nickname').val(), $('#message').val(), $("#users").val());
                     }*/
-                    $('#message').val('').focus();
+                    $('.message').val('').focus();
                 });
 
                 $('#logout').click(function () {
                     chat.connection.stop();
                 });
 
-                $('#room-link').click(function () {
+                $(".room-link").click(function (e) {
+                    console.log("Leaving room " + current_room);
+                    var x = document.getElementsByClassName(current_room.replace("@ViewBag.Servername", ""));
+
+                    console.log("Looking for class " + current_room.replace("@ViewBag.Servername", ""));
+                    for (i = 0; i < x.length; i++) {
+                        x[i].setAttribute('hidden', true);
+                        console.log("added hidden");
+                    }
+
                     chat.server.leave(current_room);
-                    current_room = $('#room-link').value;
+
+                    console.log("Joining room " + $(e.target).text());
+                    current_room = $(e.target).text() + "@ViewBag.Servername";
+                    x = document.getElementsByClassName(current_room.replace("@ViewBag.Servername", ""));
+
+                    console.log("Looking for class " + current_room.replace("@ViewBag.Servername", ""));
+                    for (i = 0; i < x.length; i++) {
+                        x[i].removeAttribute('hidden');
+                        console.log("removed hidden");
+                    }
+
                     chat.server.join(current_room);
                     chat.server.notify($('#nickname').val(), $.connection.hub.id, current_room);
+                    
                 });
 
                 $("#new-room").click(function () {
@@ -290,6 +307,19 @@
                 $("#btnHideModal").click(function () {
                     $("#loginModal").modal('hide');
                 });
+
+                $('.room').find(".message").on("keydown", function (e) {
+                if (e.which == 13) {
+                    //if ($("#users").val() == "All") {
+                    console.log(e.target);
+                    chat.server.send($('#nickname').val(), $(e.target).val(), current_room);
+                    /*}
+                    else {
+                        chat.server.sendToSpecific($('#nickname').val(), $('#message').val(), $("#users").val());
+                    }*/
+                    $('.message').val('').focus();
+                }
+            });
 
             });
         }

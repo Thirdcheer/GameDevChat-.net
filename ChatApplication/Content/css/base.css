@@ -41,3 +41,8 @@ label {
 .new-room-form{
     margin: 15px;
 }
+
+.invisible {
+    position: absolute;
+    left: -9999px;
+}

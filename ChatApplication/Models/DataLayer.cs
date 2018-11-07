@@ -241,7 +241,7 @@ namespace ChatApplication.Models
 
             foreach (DataRow row in dt.Rows)
             {
-                roomNames.Add(row["name"].ToString()+serverName);
+                roomNames.Add(row["name"].ToString() + "-" + serverName);
             }
 
             return roomNames;

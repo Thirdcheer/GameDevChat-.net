@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNet.SignalR;
+using System.Web.Mvc;
 
 namespace ChatApplication.Hubs
 {
@@ -18,7 +19,6 @@ namespace ChatApplication.Hubs
         public void getRooms(string servername)
         {
             rooms = new ChatRooms(servername);
-
         }
         
         public async Task Join(string roomName)
@@ -27,7 +27,7 @@ namespace ChatApplication.Hubs
             Clients.Group(roomName).addChatMessage(Context.User.Identity.Name + " joined.");
         }
 
-        public Task LeaveRoom(string roomName)
+        public Task Leave(string roomName)
         {
             return Groups.Remove(Context.ConnectionId, roomName);
         }

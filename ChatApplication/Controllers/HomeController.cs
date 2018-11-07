@@ -13,11 +13,38 @@ namespace ChatApplication.Controllers
     {
         DataLayer dl = new DataLayer();
 
+        [HttpPost]
+        public ActionResult Index(FormCollection fc) 
+        {
+            ViewBag.Username = System.Web.HttpContext.Current.User.Identity.Name;
+            ViewBag.Servername = dl.getServerName(ViewBag.Username);
+
+            string name = fc["roomname"].ToString();
+            int capacity = Convert.ToInt32(fc["capacity"]);
+            RoomModel room = dl.addRoom(name, ViewBag.Servername, capacity);
+            if (room != null)
+            {
+                ViewData["status"] = 1;
+                ViewData["msg"] = "room added...";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ViewData["status"] = 2;
+                ViewData["msg"] = "cannot add room";
+                return View();
+            }
+
+
+            ViewBag.Rooms = dl.getRoomsNames(ViewBag.Servername);
+        }
+
         [Authorize]
         public ActionResult Index()
         {
             ViewBag.Username = System.Web.HttpContext.Current.User.Identity.Name;
-            ViewBag.Servername = dl.getServerName(ViewBag.username);
+            ViewBag.Servername = dl.getServerName(ViewBag.Username);
+            ViewBag.Rooms = dl.getRoomsNames(ViewBag.Servername);
             return View();  
         }
        

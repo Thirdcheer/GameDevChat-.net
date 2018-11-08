@@ -16,6 +16,8 @@ namespace ChatApplication.Models
         string server_table = "servers";
         string server_user_table = "serveruser";
         string room_table = "rooms";
+        string messages_table = "messages";
+
         public DataLayer()
         {
             con.ConnectionString = ConfigurationManager.ConnectionStrings["test"].ConnectionString;
@@ -147,6 +149,41 @@ namespace ChatApplication.Models
             return user;
         }
 
+        public ServerModel getUserServer(string username)
+        {
+            UserModel user = getUser(username);
+            DataTable dt = new DataTable();
+            DataSet ds = new DataSet();
+            string sql = String.Format("select serverid from {0} where userid={1}", server_user_table, user.userid);
+            NuoDbDataAdapter da = new NuoDbDataAdapter(sql, con);
+            ds.Reset();
+            da.Fill(ds);
+            dt = ds.Tables[0];
+
+            int serverid = 0;
+
+            foreach (DataRow row in dt.Rows)
+            {
+                serverid = Convert.ToInt32(row["serverid"]);
+            }
+
+            dt = new DataTable();
+            ds = new DataSet();
+            sql = String.Format("select * from {0} where id='{1}'", server_table, serverid);
+            da = new NuoDbDataAdapter(sql, con);
+            ds.Reset();
+            da.Fill(ds);
+            dt = ds.Tables[0];
+            ServerModel server = new ServerModel();
+
+            foreach (DataRow row in dt.Rows)
+            {
+                server.id = Convert.ToInt32(row["id"]);
+                server.name = row["name"].ToString();
+            }
+            return server;
+        }
+
         public ServerModel getServer(string name)
         {
             DataTable dt = new DataTable();
@@ -247,7 +284,31 @@ namespace ChatApplication.Models
             return roomNames;
         }
 
-       public RoomModel addRoom(string name, string serverName, int capacity)
+        public RoomModel getRoom(string roomname, string servername)
+        {
+            ServerModel server = getServer(servername);
+            DataTable dt = new DataTable();
+            DataSet ds = new DataSet();
+
+            string sql = String.Format("select * from {0} where serverid='{1}' and name='{2}'", room_table, server.id, roomname);
+            NuoDbDataAdapter da = new NuoDbDataAdapter(sql, con);
+            RoomModel room = new RoomModel();
+            ds.Reset();
+            da.Fill(ds);
+            dt = ds.Tables[0];
+
+            foreach (DataRow row in dt.Rows)
+            {
+                room.name = row["name"].ToString() + "-" + servername;
+                room.id = Convert.ToInt32(row["id"]);
+                room.serverId = Convert.ToInt32(row["serverid"]);
+                room.capacity = Convert.ToInt32(row["capacity"]);
+            }
+
+            return room;
+        }
+
+        public RoomModel addRoom(string name, string serverName, int capacity)
        {
             ServerModel server = getServer(serverName);
             UserModel user = new UserModel();
@@ -304,6 +365,19 @@ namespace ChatApplication.Models
             }
             return userlist;
         }
+        
 
+        public void saveMessage(string message, string roomname, string sender)
+        {
+            UserModel user = getUser(sender);
+            ServerModel server = getUserServer(sender);
+            RoomModel room = getRoom(roomname, server.name);
+            DataTable dt = new DataTable();
+            DataSet ds = new DataSet();
+            NuoDbCommand nuocmd = new NuoDbCommand(String.Format("insert {0} (roomid, message, msgdate, senderid) values ('{1}', '{2}', '{3}', '{4}')", messages_table, room.id, message, DateTime.Now, user.userid ), con);
+            con.Open();
+            nuocmd.ExecuteNonQuery();
+            con.Close();
+        }
     }
 }

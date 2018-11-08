@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNet.SignalR;
 using System.Web.Mvc;
+using ChatApplication.Models;
 
 namespace ChatApplication.Hubs
 {
@@ -15,6 +16,7 @@ namespace ChatApplication.Hubs
 
         static ConcurrentDictionary<string, string> dic = new ConcurrentDictionary<string, string>();
         ChatRooms rooms;
+        DataLayer dl = new DataLayer();
 
         public void getRooms(string servername)
         {
@@ -35,6 +37,7 @@ namespace ChatApplication.Hubs
         public void Send(string name, string message, string roomname)
         {
             Trace.WriteLine("From: " + name + " message: " + message + " in " + roomname);
+            dl.saveMessage(message, roomname, name);
             Clients.Group(roomname).broadcastMessage(name, message, roomname);
         }
 

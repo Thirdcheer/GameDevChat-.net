@@ -179,7 +179,7 @@
 
             getTime = function () {
                 var currentDate = new Date();
-                var currentTime = currentDate.getHours() + ":"
+                var currentTime = currentDate.getDay() + "." + currentDate.getMonth() + "." + currentDate.getFullYear() + " "  + currentDate.getHours() + ":"
                     + currentDate.getMinutes() + ":"
                     + currentDate.getSeconds();
                 return currentTime;

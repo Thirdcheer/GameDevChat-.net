@@ -46,3 +46,23 @@ label {
     position: absolute;
     left: -9999px;
 }
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #494e68;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #192231;
+}
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }

@@ -149,6 +149,27 @@ namespace ChatApplication.Models
             return user;
         }
 
+        public UserModel getUser(int id)
+        {
+            UserModel user = new UserModel();
+
+            DataTable dt = new DataTable();
+            DataSet ds = new DataSet();
+            string sql = String.Format("select * from {0} where id='{1}'", login_table, id);
+            NuoDbDataAdapter da = new NuoDbDataAdapter(sql, con);
+
+            ds.Reset();
+            da.Fill(ds);
+            dt = ds.Tables[0];
+
+            foreach (DataRow row in dt.Rows)
+            {
+                user.userid = Convert.ToInt32(row["id"]);
+                user.username = row["username"].ToString();
+            }
+
+            return user;
+        }
         public ServerModel getUserServer(string username)
         {
             UserModel user = getUser(username);
@@ -371,7 +392,7 @@ namespace ChatApplication.Models
         {
             UserModel user = getUser(sender);
             ServerModel server = getUserServer(sender);
-            RoomModel room = getRoom(roomname, server.name);
+            RoomModel room = getRoom(roomname.Replace(server.name, ""), server.name);
             DataTable dt = new DataTable();
             DataSet ds = new DataSet();
             NuoDbCommand nuocmd = new NuoDbCommand(String.Format("insert {0} (roomid, message, msgdate, senderid) values ('{1}', '{2}', '{3}', '{4}')", messages_table, room.id, message, DateTime.Now, user.userid ), con);
@@ -379,5 +400,30 @@ namespace ChatApplication.Models
             nuocmd.ExecuteNonQuery();
             con.Close();
         }
+
+        public List<MessageModel> getMessages(string roomname, string servername)
+        {
+            DataTable dt = new DataTable();
+            DataSet ds = new DataSet();
+            ServerModel server = getServer(servername);
+            RoomModel room = getRoom(roomname, server.name);
+            List<MessageModel> messagesList = new List<MessageModel>();
+            string sql = String.Format("select * from {0} where {0}.roomid = {1}",  messages_table, room.id);
+            NuoDbDataAdapter da = new NuoDbDataAdapter(sql, con);
+            ds.Reset();
+            da.Fill(ds);
+            dt = ds.Tables[0];
+            foreach (DataRow row in dt.Rows)
+            {
+                MessageModel message = new MessageModel();
+                message.id = Convert.ToInt32(row["id"].ToString());
+                message.roomid = Convert.ToInt32(row["roomid"]);
+                message.message = row["message"].ToString();
+                message.msgdate = Convert.ToDateTime(row["msgdate"]);
+                message.senderid = Convert.ToInt32(row["senderid"]);
+                messagesList.Add(message);
+            }
+            
+            return messagesList.OrderBy(o => o.msgdate).ToList();         }
     }
 }

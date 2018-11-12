@@ -174,7 +174,7 @@
             $('#nickname').val(username);
 
             $.connection.hub.start().done(function () {
-                chat.server.notify($('#nickname').val(), $.connection.hub.id);
+                chat.server.notify($('#nickname').val(), $.connection.hub.id, "general" + "@ViewBag.Servername");
             });
 
             getTime = function () {
@@ -194,41 +194,35 @@
                     $("#users").append('<option value="' + name + '">' + name + '</option>');
                 }
             };
-            chat.client.enters = function (name) {
-                $('#chatlog').append('<div class="text-infos">' + name + ' joins the conversation</div>');
+            chat.client.enters = function (name, roomname) {
                 $("#users").append('<option value="' + name + '">' + name + '</option>');
                 $('#onlineusers').append('<li class="online-user">' + name + '</li>');
             };
-            chat.client.broadcastMessage = function (name, message, roomname) {
+            chat.client.broadcastMessage = function (name, message, roomname, time) {
                 if (message != "") {
                     console.log(roomname);
 
                     if (name == username) {
-                        $("." + (roomname.replace("@ViewBag.Servername", "") + " #chatlog")).append('<div class="row px-4">' +
+                        $("." + (roomname.replace("@ViewBag.Servername", "") + " #chatlog")).append('<div class="msg row px-4">' +
                             '<div class="container">' +
                             '<span class="username-right">' + name + '</span>' +
-                            '<p class= "dark" >' + message + '<br><br> <span class="time-right small">' + getTime() +
+                            '<p class= "dark" >' + message + '<br><br> <span class="time-right small">' + time +
                             '</span></p></div></div>');
-
-                        var element = document.getElementById("chatlog");
-                        element.scrollTop = element.scrollHeight - element.clientHeight;
                     }
                     else {
-                        $("." + (roomname.replace("@ViewBag.Servername", "") + " #chatlog")).append('<div class="row px-4">' +
+                        $("." + (roomname.replace("@ViewBag.Servername", "") + " #chatlog")).append('<div class="msg row px-4">' +
                             '<div class="container">' +
                             '<span class="username">' + name + '</span>' +
-                            '<p class= "light" >' + message + '<br><br> <span class="time-left small">' + getTime() +
+                            '<p class= "light" >' + message + '<br><br> <span class="time-left small">' + time +
                             '</span></p></div></div>');
                     }
-
                     console.log("Message broadcasted to: " + roomname.replace("@ViewBag.Servername", ""));
-                    var element =  $("." + (roomname.replace("@ViewBag.Servername", "") + " #chatlog"));
-                    element.scrollTop = element.scrollHeight - element.clientHeight;
+                    $(".messages:visible")[0].scrollTop = $(".messages:visible")[0].scrollHeight - $(".messages:visible")[0].clientHeight;;
+                    
+                    console.log($(".messages:visible"))
                 }
             };
-
             chat.client.disconnect = function (name) {
-                $('#chatlog').append('<div class="text-infos">' + name + ' leaves the conversation</div>');
                 $('#onlineusers li').remove(":contains('" + name + "')");
                 $("#users option").remove(":contains('" + name + "')");
             };
@@ -242,6 +236,13 @@
                 $('#chats').append("@foreach (var room in ViewBag.Rooms) {<div hidden id='chatarea' class='room @room.Replace("-" + ViewBag.Servername.ToString(), "")'><div class='room-name'>#@room.Replace("-" + ViewBag.Servername.ToString(), "")</div><div class='messages' id='chatlog'></div > <div class='message-input row' style='position:relative'><input type='text' id='message' class='col-md-11 message' spellcheck='true' autofocus placeholder='Write your message...' /><button class='submit btn btn-send col-md-1' id='btn-send'><i class='fa fa-paper-plane' aria-hidden='true'></i></button></div></div>}");
             }
 
+            chat.client.roomenter = function (name, roomname) {
+                $("." + (roomname.replace("@ViewBag.Servername", "") + " #chatlog")).append('<div class="text-infos">' + name + ' joins the conversation</div>');
+            };
+            chat.client.roomleft = function (name, roomname) {
+                $("." + (roomname.replace("@ViewBag.Servername", "") + " #chatlog")).append('<div class="text-infos">' + name + ' leaves the conversation</div>');
+            }
+            
             $.connection.hub.start().done(function () {
                 var current_room = "general" + "@ViewBag.Servername";
                 makeRooms();
@@ -255,7 +256,8 @@
                 chat.server.getRooms("@ViewBag.Servername");
                 fillRooms();
                 chat.server.join(current_room);
-                chat.server.notify($('#nickname').val(), $.connection.hub.id, current_room);
+                chat.server.notify($('#nickname').val(), $.connection.hub.id,);
+                chat.server.load(current_room.replace("@ViewBag.Servername", ""), "@ViewBag.Servername", $.connection.hub.id);
 
                 console.log("Current in room: " + current_room);
 
@@ -276,6 +278,7 @@
                 $(".room-link").click(function (e) {
                     console.log("Leaving room " + current_room);
                     var x = document.getElementsByClassName(current_room.replace("@ViewBag.Servername", ""));
+                    $("." + current_room.replace("@ViewBag.Servername", "") + ' #chatlog > .msg').remove();
 
                     console.log("Looking for class " + current_room.replace("@ViewBag.Servername", ""));
                     for (i = 0; i < x.length; i++) {
@@ -294,11 +297,14 @@
                         x[i].removeAttribute('hidden');
                         console.log("removed hidden");
                     }
-
                     chat.server.join(current_room);
                     chat.server.notify($('#nickname').val(), $.connection.hub.id, current_room);
-                    
+                    chat.server.load(current_room.replace("@ViewBag.Servername", ""), "@ViewBag.Servername", $.connection.hub.id);
+
+
                 });
+
+                
 
                 $("#new-room").click(function () {
                     $("#loginModal").modal('show');

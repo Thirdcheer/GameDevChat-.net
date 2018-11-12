@@ -26,11 +26,13 @@ namespace ChatApplication.Hubs
         public async Task Join(string roomName)
         {
             await Groups.Add(Context.ConnectionId, roomName);
-            Clients.Group(roomName).addChatMessage(Context.User.Identity.Name + " joined.");
+            //Clients.Group(roomName).addChatMessage(Context.User.Identity.Name + " joined.");
+            //Clients.Group(roomName).roomenter(Context.User.Identity.Name, roomName);
         }
 
         public Task Leave(string roomName)
         {
+           // Clients.Group(roomName).roomleft(Context.User.Identity.Name, roomName);
             return Groups.Remove(Context.ConnectionId, roomName);
         }
 
@@ -38,13 +40,13 @@ namespace ChatApplication.Hubs
         {
             Trace.WriteLine("From: " + name + " message: " + message + " in " + roomname);
             dl.saveMessage(message, roomname, name);
-            Clients.Group(roomname).broadcastMessage(name, message, roomname);
+            Clients.Group(roomname).broadcastMessage(name, message, roomname, String.Format("{0:g}", DateTime.Now));
         }
 
         public void SendToSpecific(string name, string message, string to)
         {
             Clients.Caller.broadcastMessage(name, message);
-            Clients.Client(dic[to]).broadcastMessage(name, message);
+            Clients.Client(dic[to]).broadcastMessage(name, message, DateTime.Now);
         }
 
         public void Notify(string name, string id, string roomname)
@@ -57,7 +59,7 @@ namespace ChatApplication.Hubs
                 {
                     Clients.Caller.online(entry.Key);
                 }
-                Clients.Group(roomname).enters(name);
+                Clients.Group(roomname).enters(name, roomname);
             }
         }
 
@@ -69,7 +71,16 @@ namespace ChatApplication.Hubs
             Trace.WriteLine(Context.ConnectionId + " - disconnected");
             Clients.All.disconnect(name.Key);
             return base.OnDisconnected(stopCalled);
+        }
 
+        public void Load(string roomname, string servername, string connID)
+        {
+            List<MessageModel> messages = dl.getMessages(roomname, servername);
+
+            foreach(MessageModel message in messages)
+            {
+                Clients.Client(connID).broadcastMessage(dl.getUser(message.senderid).username, message.message, roomname, String.Format("{0:g}", message.msgdate));
+            }
         }
     }
 }

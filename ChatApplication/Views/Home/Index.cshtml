@@ -121,7 +121,7 @@
             <div class="modal fade login-block" tabindex="-1" id="loginModal"
                  data-keyboard="false" data-backdrop="static">
                 <div class="modal-dialog modal-md room-modal">
-                    <div class="modal-content"> 
+                    <div class="modal-content">
                         <div class="modal-body">
                             <button type="button" class="close" style="margin:0;" data-dismiss="modal">
                                 ×
@@ -145,11 +145,35 @@
                 </div>
             </div>
 
-            <div id="chats">
-                <input type='hidden' id='nickname' />
+            <div class="container-fluid">
+                <div class="modal fade login-block" tabindex="-1" id="uploadModal"
+                     data-keyboard="false" data-backdrop="static">
+                    <div class="modal-dialog modal-lg room-modal">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <button type="button" class="close" style="margin:0;" data-dismiss="modal">
+                                    ×
+                                </button>
+                                <h4 class="modal-title" style="text-align:left">Upload a file</h4>
+                                <br />
+                                <form action="/Home/UploadFile" enctype="multipart/form-data"  method="post" id="upload-form">
+                                    <label for="file">Choose a file:</label><br />
+                                    <input type="file" name="file" class="btn float-left" id="file"><br><br>
+                                    <img src="" id="the-canvas">
+                                    <br />
+                                    <button type="submit" id="submit-file" value="Upload Image" class="btn float-right">Submit</button>
+                                    <br><br>
+                                </form>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="chats">
+                    <input type='hidden' id='nickname' />
+                </div>
             </div>
-        </div>
-    </main>
+</main>
 </div>
 
 @section scripts {
@@ -164,7 +188,8 @@
         $(function () {
             startChatHub();
         });
-
+       
+        
 
         function startChatHub() {
             var chat = $.connection.chatHub;
@@ -172,6 +197,22 @@
 
 
             $('#nickname').val(username);
+
+            $('#file').on('change', function (ev) {
+                var f = ev.target.files[0];
+                var filetype = f["type"];
+                var fr = new FileReader();
+                var ValidImageTypes = ["image/gif", "image/jpeg", "image/png"];
+
+                fr.onload = function (ev2) {
+                    if ($.inArray(ev.target.files[0]["type"], ValidImageTypes) > 0) {
+                        console.dir(ev2);
+                        $('#the-canvas').attr('src', ev2.target.result);
+                    }
+                };
+                console.log($('#file'));
+                fr.readAsDataURL(f);
+            });
 
             $.connection.hub.start().done(function () {
                 chat.server.notify($('#nickname').val(), $.connection.hub.id, "general" + "@ViewBag.Servername");
@@ -222,6 +263,34 @@
                     console.log($(".messages:visible"))
                 }
             };
+
+
+            chat.client.broadcastImage = function (name, message, roomname, time) {
+                if (message != "") {
+                    console.log(roomname);
+
+                    if (name == username) {
+                        $("." + (roomname.replace("@ViewBag.Servername", "") + " #chatlog")).append('<div class="msg row px-4">' +
+                            '<div class="container">' +
+                            '<span class="username-right">' + name + '</span>' +
+                            '<p class= "dark" >' + '<img src="' + message +'" class="preview">' + '<br><br> <span class="time-right small">' + time +
+                            '</span></p></div></div>');
+                    }
+                    else {
+                        $("." + (roomname.replace("@ViewBag.Servername", "") + " #chatlog")).append('<div class="msg row px-4">' +
+                            '<div class="container">' +
+                            '<span class="username">' + name + '</span>' +
+                            '<p class= "light" >' + '<img src="' + message + '" class="preview">' + '<br><br> <span class="time-left small">' + time +
+                            '</span></p></div></div>');
+                    }
+                    console.log("Message broadcasted to: " + roomname.replace("@ViewBag.Servername", ""));
+                    $(".messages:visible")[0].scrollTop = $(".messages:visible")[0].scrollHeight - $(".messages:visible")[0].clientHeight;;
+                    
+                    console.log($(".messages:visible"))
+                }
+            };
+
+
             chat.client.disconnect = function (name) {
                 $('#onlineusers li').remove(":contains('" + name + "')");
                 $("#users option").remove(":contains('" + name + "')");
@@ -233,7 +302,7 @@
             };
 
             makeRooms = function () {
-                $('#chats').append("@foreach (var room in ViewBag.Rooms) {<div hidden id='chatarea' class='room @room.Replace("-" + ViewBag.Servername.ToString(), "")'><div class='room-name'>#@room.Replace("-" + ViewBag.Servername.ToString(), "")</div><div class='messages' id='chatlog'></div > <div class='message-input row' style='position:relative'><input type='text' id='message' class='col-md-11 message' spellcheck='true' autofocus placeholder='Write your message...' /><button class='submit btn btn-send col-md-1' id='btn-send'><i class='fa fa-paper-plane' aria-hidden='true'></i></button></div></div>}");
+                $('#chats').append("@foreach (var room in ViewBag.Rooms) {<div hidden id='chatarea' class='room @room.Replace("-" + ViewBag.Servername.ToString(), "")'><div class='room-name'>#@room.Replace("-" + ViewBag.Servername.ToString(), "")</div><div class='messages' id='chatlog'></div > <div class='message-input row' style='position:relative'><input type='text' id='message' class='col-md-10 message' spellcheck='true' autofocus placeholder='Write your message...' /><button class='submit btn btn-send col-md-1' id='btn-file'><i class='fa fa-paperclip' aria-hidden='true'></i></button><button class='submit btn btn-send col-md-1' id='btn-send'><i class='fa fa-paper-plane' aria-hidden='true'></i></button></div></div>}");
             }
 
             chat.client.roomenter = function (name, roomname) {
@@ -310,8 +379,17 @@
                     $("#loginModal").modal('show');
                 });
 
+
                 $("#btnHideModal").click(function () {
                     $("#loginModal").modal('hide');
+                });
+
+                $("#btn-file").click(function () {
+                    $("#uploadModal").modal('show');
+                });
+
+                $("#btnHideModal").click(function () {
+                    $("#updateModal").modal('hide');
                 });
 
                 $('.room').find(".message").on("keydown", function (e) {
@@ -324,8 +402,24 @@
                         chat.server.sendToSpecific($('#nickname').val(), $('#message').val(), $("#users").val());
                     }*/
                     $('.message').val('').focus();
-                }
-            });
+                    }
+
+                });
+
+
+                $("#submit-file").click(function () {
+                    file_name = $('#file')[0].files[0].name;
+                    file_type = $('#file')[0].files[0].type;
+                    var ValidImageTypes = ["image/gif", "image/jpeg", "image/png"];
+
+                    if ($.inArray(file_type, ValidImageTypes) > 0) {
+                        chat.server.sendimage($('#nickname').val(), "../Uploaded/" + file_name, current_room);
+                        
+                    }
+                    $('#the-canvas').attr('src', "");
+                    $("#updateModal").modal('hide');
+                    
+                });
 
             });
         }

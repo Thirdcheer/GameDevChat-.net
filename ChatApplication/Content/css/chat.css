@@ -95,7 +95,7 @@
     width: 100%;
     margin: 0;
     padding: 0;
-    height: 3.2em;
+    height: 3.3em;
 }
 
 .room .message-input input {
@@ -171,4 +171,25 @@
     
 }
 
- 
+.room .message-input #btn-file {
+    background: #e1e6ea;
+    height: 3.2em;
+    color: #192231;
+    border-radius: 0;
+}
+
+#the-canvas {
+    height: auto;
+    width: 740px; /*maintain aspect ratio*/
+    margin: 15px;
+    top: 50%;
+    left: 50%;
+}
+
+.preview {
+    height: auto;
+    width: 450px; /*maintain aspect ratio*/
+    margin: 15px;
+    top: 50%;
+    left: 50%;
+}

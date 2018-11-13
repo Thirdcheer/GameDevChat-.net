@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using ChatApplication.Models;
 using System.Web.UI.WebControls;
 using System.Web.Security;
+using System.IO;
 
 namespace ChatApplication.Controllers
 {
@@ -35,8 +36,28 @@ namespace ChatApplication.Controllers
                 return View();
             }
 
+        }
 
-            ViewBag.Rooms = dl.getRoomsNames(ViewBag.Servername);
+        [HttpPost]
+        public ActionResult UploadFile(HttpPostedFileBase file)
+        {
+            if (file != null && file.ContentLength > 0)
+                try
+                {
+                    string path = Path.Combine(Server.MapPath("~/Uploaded"),
+                                               Path.GetFileName(file.FileName));
+                    file.SaveAs(path);
+                    ViewBag.Message = "File uploaded successfully";
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Message = "ERROR:" + ex.Message.ToString();
+                }
+            else
+            {
+                ViewBag.Message = "You have not specified a file.";
+            }
+            return RedirectToAction("Index");
         }
 
         [Authorize]

@@ -59,6 +59,7 @@ namespace ChatApplication.Controllers
             }
             return RedirectToAction("Index");
         }
+        
 
         [Authorize]
         public ActionResult Index()

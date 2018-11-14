@@ -257,6 +257,8 @@
                             '<p class= "light" >' + message + '<br><br> <span class="time-left small">' + time +
                             '</span></p></div></div>');
                     }
+                        ;
+
                     console.log("Message broadcasted to: " + roomname.replace("@ViewBag.Servername", ""));
                     $(".messages:visible")[0].scrollTop = $(".messages:visible")[0].scrollHeight - $(".messages:visible")[0].clientHeight;;
                     
@@ -273,18 +275,49 @@
                         $("." + (roomname.replace("@ViewBag.Servername", "") + " #chatlog")).append('<div class="msg row px-4">' +
                             '<div class="container">' +
                             '<span class="username-right">' + name + '</span>' +
-                            '<p class= "dark" >' + '<img src="' + message +'" class="preview">' + '<br><br> <span class="time-right small">' + time +
+                            '<p class= "dark" >' + '<a href="' + message +'" target="new"><img src="' + message +'" class="preview"></a>' + '<br><br> <span class="time-right small">' + time +
                             '</span></p></div></div>');
                     }
                     else {
                         $("." + (roomname.replace("@ViewBag.Servername", "") + " #chatlog")).append('<div class="msg row px-4">' +
                             '<div class="container">' +
                             '<span class="username">' + name + '</span>' +
-                            '<p class= "light" >' + '<img src="' + message + '" class="preview">' + '<br><br> <span class="time-left small">' + time +
+                            '<p class= "light" >' + '<a href="' + message + '" target="new"><img src="' + message + '" class="preview"></a>' + '<br><br> <span class="time-left small">' + time +
                             '</span></p></div></div>');
                     }
-                    console.log("Message broadcasted to: " + roomname.replace("@ViewBag.Servername", ""));
-                    $(".messages:visible")[0].scrollTop = $(".messages:visible")[0].scrollHeight - $(".messages:visible")[0].clientHeight;;
+
+                    $(".preview").on('load', function () {
+                        $(".messages:visible")[0].scrollTop = $(".messages:visible")[0].scrollHeight - $(".messages:visible")[0].clientHeight;
+                    })
+
+                    console.log("Image broadcasted to: " + roomname.replace("@ViewBag.Servername", ""));
+                    
+                    console.log($(".messages:visible"))
+                }
+            };
+
+            
+            chat.client.broadcastFile = function (name, message, roomname, time) {
+                if (message != "") {
+                    console.log(roomname);
+                    if (name == username) {
+                        $("." + (roomname.replace("@ViewBag.Servername", "") + " #chatlog")).append('<div class="msg row px-4">' +
+                            '<div class="container">' +
+                            '<span class="username-right">' + name + '</span>' +
+                            '<p class= "dark" ><a href="' + message + '" target="_blank"><i class="fas fa-file"></i> ' + message.replace("../Uploaded/", "") + '</a>' + '<br><br> <span class="time-right small">' + time +
+                            '</span></p></div></div>');
+                    }
+                    else {
+                        $("." + (roomname.replace("@ViewBag.Servername", "") + " #chatlog")).append('<div class="msg row px-4">' +
+                            '<div class="container">' +
+                            '<span class="username">' + name + '</span>' +
+                            '<p class= "light" ><a href="' + message + '" target="_blank"><i class="fas fa-file"></i> ' + message.replace("../Uploaded/", "") +'</a>' + '<br><br> <span class="time-left small">' + time +
+                            '</span></p></div></div>');
+                    }
+
+                    
+                    $(".messages:visible")[0].scrollTop = $(".messages:visible")[0].scrollHeight - $(".messages:visible")[0].clientHeight;
+                    console.log("File broadcasted to: " + roomname.replace("@ViewBag.Servername", ""));
                     
                     console.log($(".messages:visible"))
                 }
@@ -411,10 +444,12 @@
                     file_name = $('#file')[0].files[0].name;
                     file_type = $('#file')[0].files[0].type;
                     var ValidImageTypes = ["image/gif", "image/jpeg", "image/png"];
-
                     if ($.inArray(file_type, ValidImageTypes) > 0) {
                         chat.server.sendimage($('#nickname').val(), "../Uploaded/" + file_name, current_room);
-                        
+
+                    }
+                    else {
+                        chat.server.sendfile($('#nickname').val(), "../Uploaded/" + file_name, current_room);
                     }
                     $('#the-canvas').attr('src', "");
                     $("#updateModal").modal('hide');

@@ -189,7 +189,9 @@
 .preview {
     height: auto;
     width: 450px; /*maintain aspect ratio*/
-    margin: 15px;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
     top: 50%;
     left: 50%;
 }

@@ -55,6 +55,12 @@ namespace ChatApplication.Hubs
             Clients.Group(roomname).broadcastImage(name, imagelink, roomname, String.Format("{0:g}", DateTime.Now));
         }
 
+        public void Sendfile(string name, string filesrc, string roomname)
+        {
+            dl.saveMessage("filesrc: " + filesrc, roomname, name);
+            Clients.Group(roomname).broadcastFile(name, filesrc, roomname, String.Format("{0:g}", DateTime.Now));
+        }
+
         public void Notify(string name, string id, string roomname)
         {
             var exists = dic.FirstOrDefault(x => x.Key == name);
@@ -85,9 +91,14 @@ namespace ChatApplication.Hubs
 
             foreach(MessageModel message in messages)
             {
-                if (message.message.Contains("imagesrc"))
+                if (message.message.Contains("imagesrc:"))
                 {
                     Clients.Client(connID).broadcastImage(dl.getUser(message.senderid).username, message.message.Replace("imagesrc: ", ""), roomname, String.Format("{0:g}", message.msgdate));
+
+                }
+                else if (message.message.Contains("filesrc:"))
+                {
+                    Clients.Client(connID).broadcastFile(dl.getUser(message.senderid).username, message.message.Replace("filesrc: ", ""), roomname, String.Format("{0:g}", message.msgdate));
 
                 }
                 else

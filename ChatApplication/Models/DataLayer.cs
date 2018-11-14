@@ -144,6 +144,7 @@ namespace ChatApplication.Models
             {
                 user.userid = Convert.ToInt32(row["id"]);
                 user.username = row["username"].ToString();
+                user.role = row["userrole"].ToString();
             }
 
             return user;
@@ -166,6 +167,7 @@ namespace ChatApplication.Models
             {
                 user.userid = Convert.ToInt32(row["id"]);
                 user.username = row["username"].ToString();
+                user.role = row["userrole"].ToString();
             }
 
             return user;
@@ -222,6 +224,7 @@ namespace ChatApplication.Models
             {
                 server.id = Convert.ToInt32(row["id"]);
                 server.name = row["name"].ToString();
+                server.joinString = row["joinstring"].ToString();
             }
 
             return server;
@@ -382,6 +385,7 @@ namespace ChatApplication.Models
                 user.userid = Convert.ToInt32(row["id"].ToString());
                 user.username = row["username"].ToString();
                 user.password = row["password"].ToString();
+                user.role = row["userrole"].ToString();
                 userlist.Add(user);
             }
             return userlist;

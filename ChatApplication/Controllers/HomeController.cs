@@ -19,6 +19,7 @@ namespace ChatApplication.Controllers
         {
             ViewBag.Username = System.Web.HttpContext.Current.User.Identity.Name;
             ViewBag.Servername = dl.getServerName(ViewBag.Username);
+            ViewBag.Userrole = dl.getUser(ViewBag.Username).role;
 
             string name = fc["roomname"].ToString();
             int capacity = Convert.ToInt32(fc["capacity"]);
@@ -66,6 +67,11 @@ namespace ChatApplication.Controllers
         {
             ViewBag.Username = System.Web.HttpContext.Current.User.Identity.Name;
             ViewBag.Servername = dl.getServerName(ViewBag.Username);
+            ViewBag.Userrole = dl.getUser(System.Web.HttpContext.Current.User.Identity.Name).role;
+            if(ViewBag.Userrole == "Admin")
+            {
+                ViewBag.joinstring = dl.getServer(ViewBag.Servername).joinString;
+            }
             ViewBag.Rooms = dl.getRoomsNames(ViewBag.Servername);
             return View();  
         }

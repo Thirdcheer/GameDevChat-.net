@@ -29,7 +29,7 @@
                     </span>
                     <br>
                     <span class="user-role">
-                        LooserUser
+                        @ViewBag.Userrole
                     </span>
 
                     <span class="logout-link">
@@ -80,6 +80,13 @@
                                 <li>
                                     <a href="#">Change password</a>
                                 </li>
+                                @{ if (ViewBag.Userrole == "Admin")
+                                    {
+                                        <li>
+                                            <a href="#" id="joinstring-link">Show server invite password</a>
+                                        </li>
+                                    }
+                                }
                             </ul>
                         </div>
                     </li>
@@ -143,36 +150,57 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div></div>
 
-            <div class="container-fluid">
-                <div class="modal fade login-block" tabindex="-1" id="uploadModal"
-                     data-keyboard="false" data-backdrop="static">
-                    <div class="modal-dialog modal-lg room-modal">
-                        <div class="modal-content">
-                            <div class="modal-body">
-                                <button type="button" class="close" style="margin:0;" data-dismiss="modal">
-                                    ×
-                                </button>
-                                <h4 class="modal-title" style="text-align:left">Upload a file</h4>
+        <div class="container-fluid">
+            <div class="modal fade login-block" tabindex="-1" id="uploadModal"
+                 data-keyboard="false" data-backdrop="static">
+                <div class="modal-dialog modal-lg room-modal">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <button type="button" class="close" style="margin:0;" data-dismiss="modal">
+                                ×
+                            </button>
+                            <h4 class="modal-title" style="text-align:left">Upload a file</h4>
+                            <br />
+                            <form action="/Home/UploadFile" enctype="multipart/form-data" method="post" id="upload-form">
+                                <label for="file">Choose a file:</label><br />
+                                <input type="file" name="file" class="btn float-left" id="file"><br><br>
+                                <img src="" id="the-canvas">
                                 <br />
-                                <form action="/Home/UploadFile" enctype="multipart/form-data"  method="post" id="upload-form">
-                                    <label for="file">Choose a file:</label><br />
-                                    <input type="file" name="file" class="btn float-left" id="file"><br><br>
-                                    <img src="" id="the-canvas">
-                                    <br />
-                                    <button type="submit" id="submit-file" value="Upload Image" class="btn float-right">Submit</button>
-                                    <br><br>
-                                </form>
-                                </div>
+                                <button type="submit" id="submit-file" value="Upload Image" class="btn float-right">Submit</button>
+                                <br><br>
+                            </form>
                         </div>
                     </div>
                 </div>
-
-                <div id="chats">
-                    <input type='hidden' id='nickname' />
-                </div>
             </div>
+            </div>
+
+                    <div class="container-fluid">
+                        <div class="modal fade login-block" tabindex="-1" id="joinstringmodal" data-keyboard="false" data-backdrop="static">
+                            <div class="modal-dialog modal-sm room-modal">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <button type="button" class="close" style="margin:0;" data-dismiss="modal">×</button>
+                                        <h4 class="modal-title" style="text-align:left">Invite password</h4>
+                                        <br />
+                                        <p>
+                                            @{ if (ViewBag.Userrole == "Admin") {
+                                                @ViewBag.joinstring}
+                                                }
+                                            </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        }}
+
+                        <div id="chats">
+                            <input type='hidden' id='nickname' />
+                        </div>
+                    </div>
 </main>
 </div>
 
@@ -424,6 +452,15 @@
                 $("#btnHideModal").click(function () {
                     $("#updateModal").modal('hide');
                 });
+
+                $("#joinstring-link").click(function () {
+                    $("#joinstringmodal").modal('show');
+                });
+
+                $("#btnHideModal").click(function () {
+                    $("#joinstringmodal").modal('hide');
+                });
+
 
                 $('.room').find(".message").on("keydown", function (e) {
                 if (e.which == 13) {

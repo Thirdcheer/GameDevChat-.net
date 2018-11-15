@@ -94,7 +94,7 @@
                         <span>Tools</span>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="#" id="calendar-link">
                             <i class="fa fa-calendar"></i>
                             <span>Calendar</span>
                         </a>
@@ -130,10 +130,10 @@
                 <div class="modal-dialog modal-md room-modal">
                     <div class="modal-content">
                         <div class="modal-body">
-                            <button type="button" class="close" style="margin:0;" data-dismiss="modal">
-                                ×
-                            </button>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h4 class="modal-title" style="text-align:left">Create new room</h4>
+                            <hr />
+                            <br />
                             <form class="new-room-form" method="post">
                                 <div class="form-group">
                                     <label for="roomname">Room name</label>
@@ -150,7 +150,8 @@
                         </div>
                     </div>
                 </div>
-            </div></div>
+            </div>
+        </div>
 
         <div class="container-fluid">
             <div class="modal fade login-block" tabindex="-1" id="uploadModal"
@@ -158,10 +159,9 @@
                 <div class="modal-dialog modal-lg room-modal">
                     <div class="modal-content">
                         <div class="modal-body">
-                            <button type="button" class="close" style="margin:0;" data-dismiss="modal">
-                                ×
-                            </button>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h4 class="modal-title" style="text-align:left">Upload a file</h4>
+                            <hr />
                             <br />
                             <form action="/Home/UploadFile" enctype="multipart/form-data" method="post" id="upload-form">
                                 <label for="file">Choose a file:</label><br />
@@ -175,49 +175,151 @@
                     </div>
                 </div>
             </div>
-            </div>
+        </div>
 
-                    <div class="container-fluid">
-                        <div class="modal fade login-block" tabindex="-1" id="joinstringmodal" data-keyboard="false" data-backdrop="static">
-                            <div class="modal-dialog modal-sm room-modal">
-                                <div class="modal-content">
-                                    <div class="modal-body">
-                                        <button type="button" class="close" style="margin:0;" data-dismiss="modal">×</button>
-                                        <h4 class="modal-title" style="text-align:left">Invite password</h4>
-                                        <br />
-                                        <p>
-                                            @{ if (ViewBag.Userrole == "Admin") {
-                                                @ViewBag.joinstring}
-                                                }
-                                            </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        }}
-
-                        <div id="chats">
-                            <input type='hidden' id='nickname' />
+        <div class="container-fluid">
+            <div class="modal fade login-block" tabindex="-1" id="joinstringmodal" data-keyboard="false" data-backdrop="static">
+                <div class="modal-dialog modal-sm room-modal">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <button type="button" class="close" style="margin:0;" data-dismiss="modal">×</button>
+                            <h4 class="modal-title" style="text-align:left">Invite password</h4>
+                            <hr />
+                            <br />
+                            <p>
+                                @{ if (ViewBag.Userrole == "Admin")
+                                    {
+                                        @ViewBag.joinstring}
+                                }
+                            </p>
                         </div>
                     </div>
-</main>
+                </div>
+            </div>
+
+            }}
+
+            <div id="modal-update" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title"><span id="eventTitle"></span></h4>
+                            <hr />
+                            <br />
+                            <button id="btnDelete" class="btn btn-default btn-sm pull-right">
+                                <span class="glyphicon glyphicon-remove"></span> Remove
+                            </button>
+                            <button id="btnEdit" class="btn btn-default btn-sm pull-right" style="margin-right:5px;">
+                                <span class="glyphicon glyphicon-pencil"></span> Edit
+                            </button>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="modal-save" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Save Event</h4>
+                            <hr />
+                            <br />
+                            <form class="form-horizontal">
+                                <input type="hidden" id="hdEventID" value="0" />
+                                <div class="form-group">
+                                    <label>Subject</label>
+                                    <input type="text" id="txtSubject" class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Start</label>
+                                    <div class="input-group date" id="dtp1">
+                                        <input type="text" id="txtStart" class="form-control" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" id="chkIsFullDay" checked="checked" />  Is Full Day event</label>
+                                    </div>
+                                </div>
+                                <div class="form-group" id="divEndDate" style="display:none">
+                                    <label>End</label>
+                                    <div class="input-group date" id="dtp2">
+                                        <input type="text" id="txtEnd" class="form-control" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <textarea id="txtDescription" rows="3" class="form-control"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Theme Color</label>
+                                    <select id="ddThemeColor" class="form-control">
+                                        <option value="">Default</option>
+                                        <option value="red">Red</option>
+                                        <option value="blue">Blue</option>
+                                        <option value="black">Black</option>
+                                        <option value="green">Green</option>
+                                    </select>
+                                </div>
+                                <button type="button" id="btnSave" class="btn btn-success">Save</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="chats">
+                <input type='hidden' id='nickname' />
+
+
+                <div id="calendar-space" class="room" hidden>
+                    <div class="room-name">Calendar</div>
+                    <div id="calendar">
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </main>
 </div>
 
 @section scripts {
     <!--Reference the SignalR library. -->
     <script src="~/Scripts/jquery.signalR-2.3.0.min.js"></script>
     <link rel="stylesheet" runat="server" media="screen" href="~/Content/css/base.css" />
+    <link rel="stylesheet" runat="server" media="screen" href="~/Content/css/calendar.css" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.css" rel="stylesheet" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.print.css" rel="stylesheet" media="print" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
     <script src="~/Content/js/sidebar.js" type="text/javascript"></script>
     <!--Reference the autogenerated SignalR hub script. -->
     <script src="~/signalr/hubs"></script>
     <!--Add script to update the page and send messages.-->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+
     <script>
         $(function () {
             startChatHub();
         });
-       
-        
+
+
 
         function startChatHub() {
             var chat = $.connection.chatHub;
@@ -248,7 +350,7 @@
 
             getTime = function () {
                 var currentDate = new Date();
-                var currentTime = currentDate.getDay() + "." + currentDate.getMonth() + "." + currentDate.getFullYear() + " "  + currentDate.getHours() + ":"
+                var currentTime = currentDate.getDay() + "." + currentDate.getMonth() + "." + currentDate.getFullYear() + " " + currentDate.getHours() + ":"
                     + currentDate.getMinutes() + ":"
                     + currentDate.getSeconds();
                 return currentTime;
@@ -272,24 +374,24 @@
                     console.log(roomname);
 
                     if (name == username) {
-                        $("." + (roomname.replace("@ViewBag.Servername", "") + " #chatlog")).append('<div class="msg row px-4">' +
+                        $("." + (roomname.replace("@ViewBag.Servername", "") + " .messages")).append('<div class="msg row px-4">' +
                             '<div class="container">' +
                             '<span class="username-right">' + name + '</span>' +
                             '<p class= "dark" >' + message + '<br><br> <span class="time-right small">' + time +
                             '</span></p></div></div>');
                     }
                     else {
-                        $("." + (roomname.replace("@ViewBag.Servername", "") + " #chatlog")).append('<div class="msg row px-4">' +
+                        $("." + (roomname.replace("@ViewBag.Servername", "") + " .messages")).append('<div class="msg row px-4">' +
                             '<div class="container">' +
                             '<span class="username">' + name + '</span>' +
                             '<p class= "light" >' + message + '<br><br> <span class="time-left small">' + time +
                             '</span></p></div></div>');
                     }
-                        ;
+                    ;
 
                     console.log("Message broadcasted to: " + roomname.replace("@ViewBag.Servername", ""));
                     $(".messages:visible")[0].scrollTop = $(".messages:visible")[0].scrollHeight - $(".messages:visible")[0].clientHeight;;
-                    
+
                     console.log($(".messages:visible"))
                 }
             };
@@ -300,14 +402,14 @@
                     console.log(roomname);
 
                     if (name == username) {
-                        $("." + (roomname.replace("@ViewBag.Servername", "") + " #chatlog")).append('<div class="msg row px-4">' +
+                        $("." + (roomname.replace("@ViewBag.Servername", "") + " .messages")).append('<div class="msg row px-4">' +
                             '<div class="container">' +
                             '<span class="username-right">' + name + '</span>' +
-                            '<p class= "dark" >' + '<a href="' + message +'" target="new"><img src="' + message +'" class="preview"></a>' + '<br><br> <span class="time-right small">' + time +
+                            '<p class= "dark" >' + '<a href="' + message + '" target="new"><img src="' + message + '" class="preview"></a>' + '<br><br> <span class="time-right small">' + time +
                             '</span></p></div></div>');
                     }
                     else {
-                        $("." + (roomname.replace("@ViewBag.Servername", "") + " #chatlog")).append('<div class="msg row px-4">' +
+                        $("." + (roomname.replace("@ViewBag.Servername", "") + " .messages")).append('<div class="msg row px-4">' +
                             '<div class="container">' +
                             '<span class="username">' + name + '</span>' +
                             '<p class= "light" >' + '<a href="' + message + '" target="new"><img src="' + message + '" class="preview"></a>' + '<br><br> <span class="time-left small">' + time +
@@ -319,34 +421,34 @@
                     })
 
                     console.log("Image broadcasted to: " + roomname.replace("@ViewBag.Servername", ""));
-                    
+
                     console.log($(".messages:visible"))
                 }
             };
 
-            
+
             chat.client.broadcastFile = function (name, message, roomname, time) {
                 if (message != "") {
                     console.log(roomname);
                     if (name == username) {
-                        $("." + (roomname.replace("@ViewBag.Servername", "") + " #chatlog")).append('<div class="msg row px-4">' +
+                        $("." + (roomname.replace("@ViewBag.Servername", "") + " .messages")).append('<div class="msg row px-4">' +
                             '<div class="container">' +
                             '<span class="username-right">' + name + '</span>' +
                             '<p class= "dark" ><a href="' + message + '" target="_blank"><i class="fas fa-file"></i> ' + message.replace("../Uploaded/", "") + '</a>' + '<br><br> <span class="time-right small">' + time +
                             '</span></p></div></div>');
                     }
                     else {
-                        $("." + (roomname.replace("@ViewBag.Servername", "") + " #chatlog")).append('<div class="msg row px-4">' +
+                        $("." + (roomname.replace("@ViewBag.Servername", "") + " .messages")).append('<div class="msg row px-4">' +
                             '<div class="container">' +
                             '<span class="username">' + name + '</span>' +
-                            '<p class= "light" ><a href="' + message + '" target="_blank"><i class="fas fa-file"></i> ' + message.replace("../Uploaded/", "") +'</a>' + '<br><br> <span class="time-left small">' + time +
+                            '<p class= "light" ><a href="' + message + '" target="_blank"><i class="fas fa-file"></i> ' + message.replace("../Uploaded/", "") + '</a>' + '<br><br> <span class="time-left small">' + time +
                             '</span></p></div></div>');
                     }
 
-                    
+
                     $(".messages:visible")[0].scrollTop = $(".messages:visible")[0].scrollHeight - $(".messages:visible")[0].clientHeight;
                     console.log("File broadcasted to: " + roomname.replace("@ViewBag.Servername", ""));
-                    
+
                     console.log($(".messages:visible"))
                 }
             };
@@ -358,7 +460,7 @@
             };
 
             fillRooms = function () {
-                $('#rooms').append("@foreach (var room in ViewBag.Rooms) {<li><a href='#' class='room-link' id='@room'>" + "@room.Replace("-" + ViewBag.Servername.ToString(), "")"  +"</a></li>}");
+                $('#rooms').append("@foreach (var room in ViewBag.Rooms) {<li><a href='#' class='room-link' id='@room'>" + "@room.Replace("-" + ViewBag.Servername.ToString(), "")" + "</a></li>}");
                 $('#rooms').append("<li><a href='#' id='new-room'>Create new room</a></li>");
             };
 
@@ -372,7 +474,7 @@
             chat.client.roomleft = function (name, roomname) {
                 $("." + (roomname.replace("@ViewBag.Servername", "") + " #chatlog")).append('<div class="text-infos">' + name + ' leaves the conversation</div>');
             }
-            
+
             $.connection.hub.start().done(function () {
                 var current_room = "general" + "@ViewBag.Servername";
                 makeRooms();
@@ -386,14 +488,14 @@
                 chat.server.getRooms("@ViewBag.Servername");
                 fillRooms();
                 chat.server.join(current_room);
-                chat.server.notify($('#nickname').val(), $.connection.hub.id,);
+                chat.server.notify($('#nickname').val(), $.connection.hub.id, current_room);
                 chat.server.load(current_room.replace("@ViewBag.Servername", ""), "@ViewBag.Servername", $.connection.hub.id);
 
                 console.log("Current in room: " + current_room);
 
                 $('.room').find('#btn-send').click(function () {
                     //if ($("#users").val() == "All") {
-                        chat.server.send($('#nickname').val(), $('.message').val(), current_room);
+                    chat.server.send($('#nickname').val(), $('.message').val(), current_room);
                     /*}
                     else {
                         chat.server.sendToSpecific($('#nickname').val(), $('#message').val(), $("#users").val());
@@ -405,7 +507,7 @@
                     chat.connection.stop();
                 });
 
-                $(".room-link").click(function (e) {
+                leave_current_room = function () {
                     console.log("Leaving room " + current_room);
                     var x = document.getElementsByClassName(current_room.replace("@ViewBag.Servername", ""));
                     $("." + current_room.replace("@ViewBag.Servername", "") + ' #chatlog > .msg').remove();
@@ -417,6 +519,18 @@
                     }
 
                     chat.server.leave(current_room);
+
+                };
+
+                $(".room-link").click(function (e) {
+                    leave_current_room();
+
+                    var childs = document.getElementById("chats").children;
+
+                    for (i = 0; i < childs.length; i++) {
+                        childs[i].setAttribute('hidden', true);
+                        console.log("added hidden");
+                    }
 
                     console.log("Joining room " + $(e.target).text());
                     current_room = $(e.target).text() + "@ViewBag.Servername";
@@ -430,11 +544,7 @@
                     chat.server.join(current_room);
                     chat.server.notify($('#nickname').val(), $.connection.hub.id, current_room);
                     chat.server.load(current_room.replace("@ViewBag.Servername", ""), "@ViewBag.Servername", $.connection.hub.id);
-
-
                 });
-
-                
 
                 $("#new-room").click(function () {
                     $("#loginModal").modal('show');
@@ -461,23 +571,21 @@
                     $("#joinstringmodal").modal('hide');
                 });
 
-
                 $('.room').find(".message").on("keydown", function (e) {
-                if (e.which == 13) {
-                    //if ($("#users").val() == "All") {
-                    console.log(e.target);
-                    chat.server.send($('#nickname').val(), $(e.target).val(), current_room);
-                    /*}
-                    else {
-                        chat.server.sendToSpecific($('#nickname').val(), $('#message').val(), $("#users").val());
-                    }*/
-                    $('.message').val('').focus();
+                    if (e.which == 13) {
+                        //if ($("#users").val() == "All") {
+                        console.log(e.target);
+                        chat.server.send($('#nickname').val(), $(e.target).val(), current_room);
+                        /*}
+                        else {
+                            chat.server.sendToSpecific($('#nickname').val(), $('#message').val(), $("#users").val());
+                        }*/
+                        $('.message').val('').focus();
                     }
 
                 });
-
-
-                $("#submit-file").click(function () {
+               
+                $('.room').find("#submit-file").click(function () {
                     file_name = $('#file')[0].files[0].name;
                     file_type = $('#file')[0].files[0].type;
                     var ValidImageTypes = ["image/gif", "image/jpeg", "image/png"];
@@ -490,11 +598,215 @@
                     }
                     $('#the-canvas').attr('src', "");
                     $("#updateModal").modal('hide');
-                    
+
                 });
 
+                $("#calendar-link").click(function (e) {
+                    leave_current_room();
+                    var x = document.getElementById("calendar-space");
+                    x.removeAttribute('hidden');
+                    var events = [];
+                    var selectedEvent = null;
+                    FetchEventAndRenderCalendar();
+
+                    function FetchEventAndRenderCalendar() {
+                        events = [];
+                        $.ajax({
+                            type: "GET",
+                            url: "/home/GetEvents",
+                            success: function (data) {
+                                $.each(data, function (i, v) {
+                                    events.push({
+                                        eventID: v.id,
+                                        title: v.subject,
+                                        description: v.description,
+                                        start: v.startdate,
+                                        end: v.enddate!= null ? v.enddate : null,
+                                        color: v.themecolor,
+                                        allDay: v.fullday
+                                    });
+                                })
+
+                                GenerateCalendar(events);
+                            },
+                            error: function (error) {
+                                alert('failed');
+                            }
+                        })
+
+                    };
+
+                    function GenerateCalendar(events) {
+                        $('#calendar').fullCalendar('destroy');
+                        $('#calendar').fullCalendar({
+                            contentHeight: 800,
+                            defaultDate: new Date(),
+                            timeFormat: 'h(:mm)a',
+                            header: {
+                                left: 'prev,next today',
+                                center: 'title',
+                                right: 'month,basicWeek,basicDay,agenda'
+                            },
+                            eventLimit: true,
+                            eventColor: '#192231',
+                            events: events,
+
+                            eventClick: function (calEvent, jsEvent, view) {
+                                selectedEvent = calEvent;
+
+                                $('#modal-update #eventTitle').text(calEvent.title);
+                                var $description = $('<div/>');
+                                $description.append($('<p/>').html('<b>Start:</b>' + calEvent.start.format("DD-MMM-YYYY HH:mm a")));
+                                if (calEvent.end != null) {
+                                    $description.append($('<p/>').html('<b>End:</b>' + calEvent.end.format("DD-MMM-YYYY HH:mm a")));
+                                }
+                                $description.append($('<p/>').html('<b>Description:</b>' + calEvent.description));
+                                $('#modal-update #pDetails').empty().html($description);
+
+                                $('#modal-update').modal();
+                            },
+                            selectable: true,
+                            select: function (start, end) {
+                                selectedEvent = {
+                                    eventID: 0,
+                                    title: '',
+                                    description: '',
+                                    start: start,
+                                    end: end,
+                                    allDay: false,
+                                    color: '',
+                                };
+                                openAddEditForm();
+                                $('#calendar').fullCalendar('unselect');
+                            },
+                            editable: true,
+                            eventDrop: function (event) {
+                                var data = {
+                                    id: event.eventID,
+                                    subject: event.title,
+                                    startdate: event.format('DD/MM/YYYY HH:mm A'),
+                                    enddate: event.end != null ? event.end.format('DD/MM/YYYY HH:mm A') : null,
+                                    description: event.description,
+                                    themecolor: event.color,
+                                    fullday: event.allDay
+
+                                };
+                                console.log(data);
+                                SaveEvent(data);
+                            }
+                        })
+                    };
+
+                    $('#btnEdit').click(function () {
+                        //Open modal dialog for edit event
+                        openAddEditForm();
+                    });
+
+                    $('#btnDelete').click(function () {
+                        if (selectedEvent != null && confirm('Are you sure?')) {
+                            $.ajax({
+                                type: "POST",
+                                url: '/home/DeleteEvent',
+                                data: { 'eventID': selectedEvent.eventID },
+                                success: function (data) {
+                                    if (data.status) {
+                                        //Refresh the calender
+                                        FetchEventAndRenderCalendar();
+                                        $('#modal-update').modal('hide');
+                                    }
+                                },
+                                error: function () {
+                                    alert('Failed');
+                                }
+                            })
+                        }
+                    });
+
+                    $('#dtp1,#dtp2').datetimepicker({
+                        format: 'DD/MM/YYYY HH:mm A'
+                    });
+
+                    $('#chkIsFullDay').change(function () {
+                        if ($(this).is(':checked')) {
+                            $('#divEndDate').hide();
+                        }
+                        else {
+                            $('#divEndDate').show();
+                        }
+                    });
+
+                    function openAddEditForm() {
+                        if (selectedEvent != null) {
+                            $('#hdEventID').val(selectedEvent.eventID);
+                            $('#txtSubject').val(selectedEvent.title);
+                            $('#txtStart').val(selectedEvent.start.format('DD/MM/YYYY HH:mm A'));
+                            $('#chkIsFullDay').prop("checked", selectedEvent.allDay || false);
+                            $('#chkIsFullDay').change();
+                            $('#txtEnd').val(selectedEvent.end != null ? selectedEvent.end.format('DD/MM/YYYY HH:mm A') : '');
+                            $('#txtDescription').val(selectedEvent.description);
+                            $('#ddThemeColor').val(selectedEvent.color);
+                        }
+                        $('#modal-update').modal('hide');
+                        $('#modal-save').modal();
+                    };
+
+                    $('#btnSave').click(function () {
+                        //Validation/
+                        if ($('#txtSubject').val().trim() == "") {
+                            alert('Subject required');
+                            return;
+                        }
+                        if ($('#txtStart').val().trim() == "") {
+                            alert('Start date required');
+                            return;
+                        }
+                        if ($('#chkIsFullDay').is(':checked') == false && $('#txtEnd').val().trim() == "") {
+                            alert('End date required');
+                            return;
+                        }
+                        else {
+                            var startDate = Date.parse($('#txtStart').val());
+                            var endDate = Date.parse($('#txtEnd').val());
+                            if (startDate > endDate) {
+                                alert('Invalid end date');
+                                return;
+                            }
+                        }
+
+                        var data = {
+                            id: $('#hdEventID').val(),
+                            subject: $('#txtSubject').val().trim(),
+                            startdate: $('#txtStart').val().trim(),
+                            enddate: $('#chkIsFullDay').is(':checked') ? null : $('#txtEnd').val().trim(),
+                            description: $('#txtDescription').val(),
+                            themecolor: $('#ddThemeColor').val(),
+                            fullday: $('#chkIsFullDay').is(':checked')
+                        }
+                        SaveEvent(data);
+                        // call function for submit data to the server
+                    });
+
+                    function SaveEvent(data) {
+                        $.ajax({
+                            type: "POST",
+                            url: '/home/SaveEvent',
+                            data: data,
+                            success: function (data) {
+                                if (data.status) {
+                                    //Refresh the calender
+                                    FetchEventAndRenderCalendar();
+                                    $('#modal-save').modal('hide');
+                                }
+                            },
+                            error: function () {
+                                alert('Failed');
+                            }
+                        })
+                    };
+
+                });
             });
-        }
+            }
 
     </script>
 }   

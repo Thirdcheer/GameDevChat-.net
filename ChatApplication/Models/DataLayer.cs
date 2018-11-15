@@ -17,6 +17,7 @@ namespace ChatApplication.Models
         string server_user_table = "serveruser";
         string room_table = "rooms";
         string messages_table = "messages";
+        string events_table = "events";
 
         public DataLayer()
         {
@@ -251,10 +252,96 @@ namespace ChatApplication.Models
             return serverName;
         }
 
+        public List<EventModel> getEvents(string username)
+        {
+            DataTable dt = new DataTable();
+            DataSet ds = new DataSet();
+            ServerModel server = getUserServer(username);
+            List<EventModel> eventsList = new List<EventModel>();
+            string sql = String.Format("select e.id, subject, description, startdate, enddate, themecolor, fullday, e.userid from {0} e join {1} s on e.userid = s.userid where s.serverid = {2}", events_table, server_user_table, server.id);
+            NuoDbDataAdapter da = new NuoDbDataAdapter(sql, con);
+            ds.Reset();
+            da.Fill(ds);
+            dt = ds.Tables[0];
+            foreach (DataRow row in dt.Rows)
+            {
+                EventModel ev = new EventModel();
+                ev.id = Convert.ToInt32(row["id"].ToString());
+                ev.subject = row["subject"].ToString();
+                ev.description = row["description"].ToString();
+                ev.startdate = Convert.ToDateTime(row["startdate"]);
+                ev.enddate = Convert.ToDateTime(row["enddate"]);
+                ev.themecolor = row["themecolor"].ToString();
+                ev.fullday = Convert.ToBoolean(row["fullday"]);
+                ev.userid = Convert.ToInt32(row["userId"]);
+                eventsList.Add(ev);
+            }
+
+            return eventsList;
+        }
+
+        public EventModel getEvent(int id)
+        {
+            DataTable dt = new DataTable();
+            DataSet ds = new DataSet();
+            string sql = String.Format("select * from {0} where {0}.id = '{1}'", events_table, id);
+
+            NuoDbDataAdapter da = new NuoDbDataAdapter(sql, con);
+            ds.Reset();
+            da.Fill(ds);
+            dt = ds.Tables[0];
+
+            if (dt.Rows.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                EventModel ev = new EventModel();
+                foreach (DataRow row in dt.Rows)
+                {
+                ev.id = Convert.ToInt32(row["id"].ToString());
+                ev.subject = row["subject"].ToString();
+                ev.description = row["description"].ToString();
+                ev.startdate = Convert.ToDateTime(row["startdate"]);
+                ev.enddate = Convert.ToDateTime(row["enddate"]);
+                ev.themecolor = row["themecolor"].ToString();
+                ev.fullday = Convert.ToBoolean(row["fullday"]);
+                ev.userid = Convert.ToInt32(row["userId"]);
+                }
+                return ev;
+            }
+        }
+
+        public void updateEvent(EventModel ev)
+        {
+            NuoDbCommand nuocmd = new NuoDbCommand(String.Format("update {0} set subject = '{2}', startdate = '{3}', enddate='{4}', description='{5}', fullday='{6}', themecolor='{7}', userid='{8}' where {0}.id = {1}", events_table, ev.id, ev.subject, ev.startdate, ev.enddate, ev.description, ev.fullday, ev.themecolor, ev.userid), con);
+            con.Open();
+            nuocmd.ExecuteNonQuery();
+            con.Close();
+        }
+
+        public void addEvent(EventModel ev)
+        {
+            NuoDbCommand nuocmd = new NuoDbCommand(String.Format("insert {0} (subject, startdate, enddate, description, fullday, themecolor, userid) values ('{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}')", events_table, ev.subject, ev.startdate, ev.enddate, ev.description, ev.fullday, ev.themecolor, ev.userid), con);
+            con.Open();
+            nuocmd.ExecuteNonQuery();
+            con.Close();
+        }
+
+        public void deleteEvent(int eventID)
+        {
+            NuoDbCommand nuocmd = new NuoDbCommand(String.Format("delete from {0} where {0}.id = {1}", events_table, eventID), con);
+            con.Open();
+            nuocmd.ExecuteNonQuery();
+            con.Close();
+        }
+
+
         public ServerModel joinServer(string joinstring, string username)
         {
             ServerModel server = new ServerModel();
-            DataTable dt = new DataTable();
+            DataTable dt = new DataTable(); 
             DataSet ds = new DataSet();
             string sql = String.Format("select * from {0} where joinstring='{1}'", server_table, joinstring);
             NuoDbDataAdapter da = new NuoDbDataAdapter(sql, con);

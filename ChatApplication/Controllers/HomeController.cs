@@ -166,6 +166,59 @@ namespace ChatApplication.Controllers
 
         }
 
+        public JsonResult GetEvents()
+        {
+                var events = dl.getEvents(System.Web.HttpContext.Current.User.Identity.Name);
+                return new JsonResult { Data = events, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            
+        }
+
+        [HttpPost]
+        public JsonResult SaveEvent(EventModel e)
+                {
+                    var status = false;
+                        if (e.id > 0)
+                        {
+                            //Update the event
+                            var v =  dl.getEvent(e.id);
+                            if (v != null)
+                            {
+                                v.subject = e.subject;
+                                v.startdate = e.startdate;
+                                v.enddate = e.enddate;
+                                v.description = e.description;
+                                v.fullday = e.fullday;
+                                v.themecolor = e.themecolor;
+                                v.userid = dl.getUser(System.Web.HttpContext.Current.User.Identity.Name).userid;
+                                dl.updateEvent(v);
+                            }
+                        }
+                        else
+                        {
+                e.userid = dl.getUser(System.Web.HttpContext.Current.User.Identity.Name).userid;
+                dl.addEvent(e);
+                        }
+                        status = true;
+                    
+                    return new JsonResult { Data = new { status = status } };
+                }
+
+        [HttpPost]
+        public JsonResult DeleteEvent(int eventID)
+        {
+            var status = false;
+                var v = dl.getEvent(eventID);
+                if (v != null)
+                {
+                    dl.deleteEvent(eventID);
+                    status = true;
+                }
+            
+            return new JsonResult { Data = new { status = status } };
+        }
+
+
+
         [Authorize]
         [HttpPost]
         public ActionResult serverjoin(FormCollection fc)

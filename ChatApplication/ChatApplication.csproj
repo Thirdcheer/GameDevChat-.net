@@ -395,6 +395,7 @@
     <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Hubs\ChatRooms.cs" />
     <Compile Include="Models\DataLayer.cs" />
+    <Compile Include="Models\EventModel.cs" />
     <Compile Include="Models\MessageModel.cs" />
     <Compile Include="Models\RoomModel.cs" />
     <Compile Include="Models\ServerModel.cs" />
@@ -410,6 +411,7 @@
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\css\calendar.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />

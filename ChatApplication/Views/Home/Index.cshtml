@@ -374,14 +374,14 @@
                     console.log(roomname);
 
                     if (name == username) {
-                        $("." + (roomname.replace("@ViewBag.Servername", "") + " .messages")).append('<div class="msg row px-4">' +
+                        $("." + (roomname.replace("@ViewBag.Servername", "").replace(/\s/g, '-') + " .messages")).append('<div class="msg row px-4">' +
                             '<div class="container">' +
                             '<span class="username-right">' + name + '</span>' +
                             '<p class= "dark" >' + message + '<br><br> <span class="time-right small">' + time +
                             '</span></p></div></div>');
                     }
                     else {
-                        $("." + (roomname.replace("@ViewBag.Servername", "") + " .messages")).append('<div class="msg row px-4">' +
+                        $("." + (roomname.replace("@ViewBag.Servername", "").replace(/\s/g, '-') + " .messages")).append('<div class="msg row px-4">' +
                             '<div class="container">' +
                             '<span class="username">' + name + '</span>' +
                             '<p class= "light" >' + message + '<br><br> <span class="time-left small">' + time +
@@ -402,14 +402,14 @@
                     console.log(roomname);
 
                     if (name == username) {
-                        $("." + (roomname.replace("@ViewBag.Servername", "") + " .messages")).append('<div class="msg row px-4">' +
+                        $("." + (roomname.replace("@ViewBag.Servername", "").replace(/\s/g, '-') + " .messages")).append('<div class="msg row px-4">' +
                             '<div class="container">' +
                             '<span class="username-right">' + name + '</span>' +
                             '<p class= "dark" >' + '<a href="' + message + '" target="new"><img src="' + message + '" class="preview"></a>' + '<br><br> <span class="time-right small">' + time +
                             '</span></p></div></div>');
                     }
                     else {
-                        $("." + (roomname.replace("@ViewBag.Servername", "") + " .messages")).append('<div class="msg row px-4">' +
+                        $("." + (roomname.replace("@ViewBag.Servername", "").replace(/\s/g, '-') + " .messages")).append('<div class="msg row px-4">' +
                             '<div class="container">' +
                             '<span class="username">' + name + '</span>' +
                             '<p class= "light" >' + '<a href="' + message + '" target="new"><img src="' + message + '" class="preview"></a>' + '<br><br> <span class="time-left small">' + time +
@@ -431,14 +431,14 @@
                 if (message != "") {
                     console.log(roomname);
                     if (name == username) {
-                        $("." + (roomname.replace("@ViewBag.Servername", "") + " .messages")).append('<div class="msg row px-4">' +
+                        $("." + (roomname.replace("@ViewBag.Servername", "").replace(/\s/g, '-') + " .messages")).append('<div class="msg row px-4">' +
                             '<div class="container">' +
                             '<span class="username-right">' + name + '</span>' +
                             '<p class= "dark" ><a href="' + message + '" target="_blank"><i class="fas fa-file"></i> ' + message.replace("../Uploaded/", "") + '</a>' + '<br><br> <span class="time-right small">' + time +
                             '</span></p></div></div>');
                     }
                     else {
-                        $("." + (roomname.replace("@ViewBag.Servername", "") + " .messages")).append('<div class="msg row px-4">' +
+                        $("." + (roomname.replace("@ViewBag.Servername", "").replace(/\s/g, '-') + " .messages")).append('<div class="msg row px-4">' +
                             '<div class="container">' +
                             '<span class="username">' + name + '</span>' +
                             '<p class= "light" ><a href="' + message + '" target="_blank"><i class="fas fa-file"></i> ' + message.replace("../Uploaded/", "") + '</a>' + '<br><br> <span class="time-left small">' + time +
@@ -465,7 +465,7 @@
             };
 
             makeRooms = function () {
-                $('#chats').append("@foreach (var room in ViewBag.Rooms) {<div hidden id='chatarea' class='room @room.Replace("-" + ViewBag.Servername.ToString(), "")'><div class='room-name'>#@room.Replace("-" + ViewBag.Servername.ToString(), "")</div><div class='messages' id='chatlog'></div > <div class='message-input row' style='position:relative'><input type='text' id='message' class='col-md-10 message' spellcheck='true' autofocus placeholder='Write your message...' /><button class='submit btn btn-send col-md-1' id='btn-file'><i class='fa fa-paperclip' aria-hidden='true'></i></button><button class='submit btn btn-send col-md-1' id='btn-send'><i class='fa fa-paper-plane' aria-hidden='true'></i></button></div></div>}");
+                $('#chats').append("@foreach (var room in ViewBag.Rooms) {<div hidden id='chatarea' class='room @room.Replace("-" + ViewBag.Servername.ToString(), "").Replace(" ", "-")'><div class='room-name'>#@room.Replace("-" + ViewBag.Servername.ToString(), "")</div><div class='messages' id='chatlog'></div > <div class='message-input row' style='position:relative'><input type='text' id='message' class='col-md-10 message' spellcheck='true' autofocus placeholder='Write your message...' /><button class='submit btn btn-send col-md-1' id='btn-file'><i class='fa fa-paperclip' aria-hidden='true'></i></button><button class='submit btn btn-send col-md-1' id='btn-send'><i class='fa fa-paper-plane' aria-hidden='true'></i></button></div></div>}");
             }
 
             chat.client.roomenter = function (name, roomname) {
@@ -478,7 +478,7 @@
             $.connection.hub.start().done(function () {
                 var current_room = "general" + "@ViewBag.Servername";
                 makeRooms();
-                var x = document.getElementsByClassName(current_room.replace("@ViewBag.Servername", ""));
+                var x = document.getElementsByClassName(current_room.replace("@ViewBag.Servername", "").replace(/\s/g, '-'));
 
                 console.log("Looking for class " + current_room.replace("@ViewBag.Servername", ""))
                 for (i = 0; i < x.length; i++) {
@@ -503,16 +503,22 @@
                     $('.message').val('').focus();
                 });
 
+                $('.room').find("#btn-file").click(function () {
+                    $("#uploadModal").modal('show');
+                    console.log("Send file clicked")
+                        ;
+                });
+
                 $('#logout').click(function () {
                     chat.connection.stop();
                 });
 
                 leave_current_room = function () {
                     console.log("Leaving room " + current_room);
-                    var x = document.getElementsByClassName(current_room.replace("@ViewBag.Servername", ""));
-                    $("." + current_room.replace("@ViewBag.Servername", "") + ' #chatlog > .msg').remove();
+                    var x = document.getElementsByClassName(current_room.replace("@ViewBag.Servername", "").replace(/\s/g, '-'));
+                    $("." + current_room.replace("@ViewBag.Servername", "").replace(/\s/g, '-') + ' #chatlog > .msg').remove();
 
-                    console.log("Looking for class " + current_room.replace("@ViewBag.Servername", ""));
+                    console.log("Looking for class " + current_room.replace("@ViewBag.Servername", "").replace(/\s/g, '-'));
                     for (i = 0; i < x.length; i++) {
                         x[i].setAttribute('hidden', true);
                         console.log("added hidden");
@@ -534,9 +540,9 @@
 
                     console.log("Joining room " + $(e.target).text());
                     current_room = $(e.target).text() + "@ViewBag.Servername";
-                    x = document.getElementsByClassName(current_room.replace("@ViewBag.Servername", ""));
+                    x = document.getElementsByClassName(current_room.replace("@ViewBag.Servername", "").replace(/\s/g, '-'));
 
-                    console.log("Looking for class " + current_room.replace("@ViewBag.Servername", ""));
+                    console.log("Looking for class " + current_room.replace("@ViewBag.Servername", "").replace(/\s/g, '-'));
                     for (i = 0; i < x.length; i++) {
                         x[i].removeAttribute('hidden');
                         console.log("removed hidden");
@@ -553,7 +559,7 @@
 
                 $("#btnHideModal").click(function () {
                     $("#loginModal").modal('hide');
-                });
+                })
 
                 $("#btn-file").click(function () {
                     $("#uploadModal").modal('show');
@@ -585,7 +591,7 @@
 
                 });
                
-                $('.room').find("#submit-file").click(function () {
+                $("#submit-file").click(function () {
                     file_name = $('#file')[0].files[0].name;
                     file_type = $('#file')[0].files[0].type;
                     var ValidImageTypes = ["image/gif", "image/jpeg", "image/png"];

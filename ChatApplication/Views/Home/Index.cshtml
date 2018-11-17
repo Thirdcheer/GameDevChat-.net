@@ -505,8 +505,7 @@
 
                 $('.room').find("#btn-file").click(function () {
                     $("#uploadModal").modal('show');
-                    console.log("Send file clicked")
-                        ;
+                    console.log("Send file clicked");
                 });
 
                 $('#logout').click(function () {
@@ -591,21 +590,39 @@
 
                 });
                
-                $("#submit-file").click(function () {
-                    file_name = $('#file')[0].files[0].name;
-                    file_type = $('#file')[0].files[0].type;
-                    var ValidImageTypes = ["image/gif", "image/jpeg", "image/png"];
-                    if ($.inArray(file_type, ValidImageTypes) > 0) {
-                        chat.server.sendimage($('#nickname').val(), "../Uploaded/" + file_name, current_room);
 
-                    }
-                    else {
-                        chat.server.sendfile($('#nickname').val(), "../Uploaded/" + file_name, current_room);
-                    }
-                    $('#the-canvas').attr('src', "");
-                    $("#updateModal").modal('hide');
+                $("#upload-form").on('submit', function (e) {
 
+                    e.preventDefault();
+                    var formData = new FormData(this);
+                    console.log(formData);
+
+                    $.ajax({
+                        url: '/Home/UploadFile',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function () {
+                            file_name = $('#file')[0].files[0].name;
+                            file_type = $('#file')[0].files[0].type;
+                            var ValidImageTypes = ["image/gif", "image/jpeg", "image/png"];
+                            if ($.inArray(file_type, ValidImageTypes) > 0) {
+                                chat.server.sendimage($('#nickname').val(), "../Uploaded/" + file_name, current_room);
+
+                            }
+                            else {
+                                chat.server.sendfile($('#nickname').val(), "../Uploaded/" + file_name, current_room);
+                            }
+                            $('#the-canvas').attr('src', "");
+                            $("#file").replaceWith($('#file').val('').clone(true));;
+                        }
+                    });
+
+                    $("#updateModal").attr("hidden", true);
                 });
+
+
 
                 $("#calendar-link").click(function (e) {
                     leave_current_room();

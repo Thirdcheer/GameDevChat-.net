@@ -300,14 +300,14 @@ namespace ChatApplication.Models
                 EventModel ev = new EventModel();
                 foreach (DataRow row in dt.Rows)
                 {
-                ev.id = Convert.ToInt32(row["id"].ToString());
-                ev.subject = row["subject"].ToString();
-                ev.description = row["description"].ToString();
-                ev.startdate = Convert.ToDateTime(row["startdate"]);
-                ev.enddate = Convert.ToDateTime(row["enddate"]);
-                ev.themecolor = row["themecolor"].ToString();
-                ev.fullday = Convert.ToBoolean(row["fullday"]);
-                ev.userid = Convert.ToInt32(row["userId"]);
+                    ev.id = Convert.ToInt32(row["id"].ToString());
+                    ev.subject = row["subject"].ToString();
+                    ev.description = row["description"].ToString();
+                    ev.startdate = Convert.ToDateTime(row["startdate"]);
+                    ev.enddate = Convert.ToDateTime(row["enddate"]);
+                    ev.themecolor = row["themecolor"].ToString();
+                    ev.fullday = Convert.ToBoolean(row["fullday"]);
+                    ev.userid = Convert.ToInt32(row["userId"]);
                 }
                 return ev;
             }
@@ -514,7 +514,71 @@ namespace ChatApplication.Models
                 message.senderid = Convert.ToInt32(row["senderid"]);
                 messagesList.Add(message);
             }
-            
-            return messagesList.OrderBy(o => o.msgdate).ToList();         }
+
+            //List<MessageModel> lista = messagesList.OrderBy(o => o.msgdate).ToList();
+            //messagesList.Reverse();
+
+
+            return messagesList ;
+        }
+
+        public int getMessagesLastRow(string roomname, string servername)
+        {
+            DataTable dt = new DataTable();
+            DataSet ds = new DataSet();
+            ServerModel server = getServer(servername);
+            RoomModel room = getRoom(roomname, server.name);
+            List<MessageModel> messagesList = new List<MessageModel>();
+            string sql = String.Format("select * from {0} where {0}.roomid = {1} order by {0}.id desc limit 1", messages_table, room.id);
+            NuoDbDataAdapter da = new NuoDbDataAdapter(sql, con);
+            ds.Reset();
+            da.Fill(ds);
+            dt = ds.Tables[0];
+            int count = 0;
+            foreach (DataRow row in dt.Rows)
+            {
+                count = Convert.ToInt32(row["id"]);
+            }
+
+            return count;
+        }
+
+        public List<MessageModel> getMessagesAboveId(string roomname, string servername, int id, int count)
+        {
+            DataTable dt = new DataTable();
+            DataSet ds = new DataSet();
+            ServerModel server = getServer(servername);
+            RoomModel room = getRoom(roomname, server.name);
+            List<MessageModel> messagesList = new List<MessageModel>();
+            if(id == 0)
+            {
+                id = getMessagesLastRow(roomname, servername);
+            }
+
+            string sql = String.Format("select * from {0} where {0}.roomid = {1} and {0}.id <= {2} order by {0}.id desc limit {3}", messages_table, room.id, id, count);
+            NuoDbDataAdapter da = new NuoDbDataAdapter(sql, con);
+            ds.Reset();
+            da.Fill(ds);
+            dt = ds.Tables[0];
+            foreach (DataRow row in dt.Rows)
+            {
+                MessageModel message = new MessageModel();
+                message.id = Convert.ToInt32(row["id"].ToString());
+                message.roomid = Convert.ToInt32(row["roomid"]);
+                message.message = row["message"].ToString();
+                message.msgdate = Convert.ToDateTime(row["msgdate"]);
+                message.senderid = Convert.ToInt32(row["senderid"]);
+                messagesList.Add(message);
+            }
+
+            //List<MessageModel> lista = messagesList.OrderBy(o => o.msgdate).ToList();
+           // messagesList.Reverse();
+
+
+            return messagesList;
+
+        }
+
+
     }
 }

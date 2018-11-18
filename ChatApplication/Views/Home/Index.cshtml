@@ -10,9 +10,6 @@
         <div class="sidebar-content">
             <div class="sidebar-brand">
                 <a href="#">@ViewBag.Servername</a>
-                <div id="close-sidebar">
-                    <i class="fas fa-times"></i>
-                </div>
             </div>
             <div class="sidebar-header">
                 <div class="user-pic">
@@ -197,7 +194,7 @@
                 </div>
             </div>
 
-            }}
+            
 
             <div id="modal-update" class="modal fade" role="dialog">
                 <div class="modal-dialog">
@@ -324,6 +321,8 @@
         function startChatHub() {
             var chat = $.connection.chatHub;
             var username = "@ViewBag.Username";
+            var loaded_messages = 0;
+            var last_loaded_id = 0;
 
 
             $('#nickname').val(username);
@@ -340,7 +339,7 @@
                         $('#the-canvas').attr('src', ev2.target.result);
                     }
                 };
-                console.log($('#file'));
+                //console.log($('#file'));
                 fr.readAsDataURL(f);
             });
 
@@ -369,90 +368,135 @@
                 $("#users").append('<option value="' + name + '">' + name + '</option>');
                 $('#onlineusers').append('<li class="online-user">' + name + '</li>');
             };
-            chat.client.broadcastMessage = function (name, message, roomname, time) {
-                if (message != "") {
-                    console.log(roomname);
 
+            chat.client.scrollDown = function () {
+                $(".messages:visible")[0].scrollTop = $(".messages:visible")[0].scrollHeight - $(".messages:visible")[0].clientHeight;
+
+            }
+
+            chat.client.broadcastMessage = function (name, message, roomname, time, loaded) {
+                if (message != "") {
+                    message = message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                    //console.log(roomname);
+                    var funkcja; 
+                    if (loaded) {
+                        funkcja = function (node, message) {
+                            node.prepend(message);
+                        }
+                    }
+                    else {
+                        funkcja = function (node, message) {
+                            node.append(message);
+                        }
+                    }
                     if (name == username) {
-                        $("." + (roomname.replace("@ViewBag.Servername", "").replace(/\s/g, '-') + " .messages")).append('<div class="msg row px-4">' +
+                        funkcja($("." + (roomname.replace("@ViewBag.Servername", "").replace(/\s/g, '-') + " .messages")), ('<div class="msg row px-4">' +
                             '<div class="container">' +
                             '<span class="username-right">' + name + '</span>' +
                             '<p class= "dark" >' + message + '<br><br> <span class="time-right small">' + time +
-                            '</span></p></div></div>');
+                            '</span></p></div></div>'));
                     }
                     else {
-                        $("." + (roomname.replace("@ViewBag.Servername", "").replace(/\s/g, '-') + " .messages")).append('<div class="msg row px-4">' +
+                       funkcja( $("." + (roomname.replace("@ViewBag.Servername", "").replace(/\s/g, '-') + " .messages")),('<div class="msg row px-4">' +
                             '<div class="container">' +
                             '<span class="username">' + name + '</span>' +
                             '<p class= "light" >' + message + '<br><br> <span class="time-left small">' + time +
-                            '</span></p></div></div>');
+                            '</span></p></div></div>'));
                     }
                     ;
-
-                    console.log("Message broadcasted to: " + roomname.replace("@ViewBag.Servername", ""));
-                    $(".messages:visible")[0].scrollTop = $(".messages:visible")[0].scrollHeight - $(".messages:visible")[0].clientHeight;;
-
-                    console.log($(".messages:visible"))
+                    if (!loaded) {
+                       // console.log("Message broadcasted to: " + roomname.replace("@ViewBag.Servername", ""));
+                        $(".messages:visible")[0].scrollTop = $(".messages:visible")[0].scrollHeight - $(".messages:visible")[0].clientHeight;
+                    }
+                    //console.log($(".messages:visible"))
                 }
             };
 
 
-            chat.client.broadcastImage = function (name, message, roomname, time) {
+            chat.client.broadcastImage = function (name, message, roomname, time, loaded) {
                 if (message != "") {
-                    console.log(roomname);
+                    //console.log(roomname);
+                    var funkcja;
+                    if (loaded) {
+                        funkcja = function (node, message) {
+                            //node.prepend(message);
+                            node.prepend(message);
+                        }
+                    }
+                    else {
+                        funkcja = function (node, message) {
+                            node.append(message);
+                        }
+                    }
 
                     if (name == username) {
-                        $("." + (roomname.replace("@ViewBag.Servername", "").replace(/\s/g, '-') + " .messages")).append('<div class="msg row px-4">' +
+                        funkcja($("." + (roomname.replace("@ViewBag.Servername", "").replace(/\s/g, '-') + " .messages")),('<div class="msg row px-4">' +
                             '<div class="container">' +
                             '<span class="username-right">' + name + '</span>' +
                             '<p class= "dark" >' + '<a href="' + message + '" target="new"><img src="' + message + '" class="preview"></a>' + '<br><br> <span class="time-right small">' + time +
-                            '</span></p></div></div>');
+                            '</span></p></div></div>'));
                     }
                     else {
-                        $("." + (roomname.replace("@ViewBag.Servername", "").replace(/\s/g, '-') + " .messages")).append('<div class="msg row px-4">' +
+                        funkcja($("." + (roomname.replace("@ViewBag.Servername", "").replace(/\s/g, '-') + " .messages")),('<div class="msg row px-4">' +
                             '<div class="container">' +
                             '<span class="username">' + name + '</span>' +
                             '<p class= "light" >' + '<a href="' + message + '" target="new"><img src="' + message + '" class="preview"></a>' + '<br><br> <span class="time-left small">' + time +
-                            '</span></p></div></div>');
+                            '</span></p></div></div>'));
                     }
 
-                    $(".preview").on('load', function () {
-                        $(".messages:visible")[0].scrollTop = $(".messages:visible")[0].scrollHeight - $(".messages:visible")[0].clientHeight;
-                    })
+                    if (!loaded) {
+                        $(".preview").on('load', function () {
+                            $(".messages:visible")[0].scrollTop = $(".messages:visible")[0].scrollHeight - $(".messages:visible")[0].clientHeight;
+                        })
+                    }
 
-                    console.log("Image broadcasted to: " + roomname.replace("@ViewBag.Servername", ""));
+                    //console.log("Image broadcasted to: " + roomname.replace("@ViewBag.Servername", ""));
 
-                    console.log($(".messages:visible"))
+                    //console.log($(".messages:visible"))
                 }
             };
 
 
-            chat.client.broadcastFile = function (name, message, roomname, time) {
+            chat.client.broadcastFile = function (name, message, roomname, time, loaded) {
                 if (message != "") {
-                    console.log(roomname);
+                    //console.log(roomname);
+
+                    var funkcja;
+                    if (loaded) {
+                        funkcja = function (node, message) {
+                            node.prepend(message);
+                        }
+                    }
+                    else {
+                        funkcja = function (node, message) {
+                            node.append(message);
+                        }
+                    }
+
                     if (name == username) {
-                        $("." + (roomname.replace("@ViewBag.Servername", "").replace(/\s/g, '-') + " .messages")).append('<div class="msg row px-4">' +
+                        funkcja($("." + (roomname.replace("@ViewBag.Servername", "").replace(/\s/g, '-') + " .messages")),('<div class="msg row px-4">' +
                             '<div class="container">' +
                             '<span class="username-right">' + name + '</span>' +
                             '<p class= "dark" ><a href="' + message + '" target="_blank"><i class="fas fa-file"></i> ' + message.replace("../Uploaded/", "") + '</a>' + '<br><br> <span class="time-right small">' + time +
-                            '</span></p></div></div>');
+                            '</span></p></div></div>'));
                     }
                     else {
-                        $("." + (roomname.replace("@ViewBag.Servername", "").replace(/\s/g, '-') + " .messages")).append('<div class="msg row px-4">' +
+                        funkcja($("." + (roomname.replace("@ViewBag.Servername", "").replace(/\s/g, '-') + " .messages")),('<div class="msg row px-4">' +
                             '<div class="container">' +
                             '<span class="username">' + name + '</span>' +
                             '<p class= "light" ><a href="' + message + '" target="_blank"><i class="fas fa-file"></i> ' + message.replace("../Uploaded/", "") + '</a>' + '<br><br> <span class="time-left small">' + time +
-                            '</span></p></div></div>');
+                            '</span></p></div></div>'));
                     }
 
+                    if (!loaded) {
+                        
+                        $(".messages:visible")[0].scrollTop = $(".messages:visible")[0].scrollHeight - $(".messages:visible")[0].clientHeight;
+                        //console.log("File broadcasted to: " + roomname.replace("@ViewBag.Servername", ""));
+                    }
 
-                    $(".messages:visible")[0].scrollTop = $(".messages:visible")[0].scrollHeight - $(".messages:visible")[0].clientHeight;
-                    console.log("File broadcasted to: " + roomname.replace("@ViewBag.Servername", ""));
-
-                    console.log($(".messages:visible"))
+                    //console.log($(".messages:visible"))
                 }
             };
-
 
             chat.client.disconnect = function (name) {
                 $('#onlineusers li').remove(":contains('" + name + "')");
@@ -465,7 +509,7 @@
             };
 
             makeRooms = function () {
-                $('#chats').append("@foreach (var room in ViewBag.Rooms) {<div hidden id='chatarea' class='room @room.Replace("-" + ViewBag.Servername.ToString(), "").Replace(" ", "-")'><div class='room-name'>#@room.Replace("-" + ViewBag.Servername.ToString(), "")</div><div class='messages' id='chatlog'></div > <div class='message-input row' style='position:relative'><input type='text' id='message' class='col-md-10 message' spellcheck='true' autofocus placeholder='Write your message...' /><button class='submit btn btn-send col-md-1' id='btn-file'><i class='fa fa-paperclip' aria-hidden='true'></i></button><button class='submit btn btn-send col-md-1' id='btn-send'><i class='fa fa-paper-plane' aria-hidden='true'></i></button></div></div>}");
+                $('#chats').append("@foreach (var room in ViewBag.Rooms) {<div hidden id='chatarea' class='room @room.Replace("-" + ViewBag.Servername.ToString(), "").Replace(" ", "-")'><div class='room-name'>#@room.Replace("-" + ViewBag.Servername.ToString(), "")</div><div class='messages' id='chatlog'></div > <div class='message-input row' style='position:relative' maxlength='499'><input type='text' id='message' class='col-md-10 message' spellcheck='true' autofocus maxlength='499' placeholder='Write your message...' /><button class='submit btn btn-send col-md-1' id='btn-file'><i class='fa fa-paperclip' aria-hidden='true'></i></button><button class='submit btn btn-send col-md-1' id='btn-send'><i class='fa fa-paper-plane' aria-hidden='true'></i></button></div></div>}");
             }
 
             chat.client.roomenter = function (name, roomname) {
@@ -477,21 +521,42 @@
 
             $.connection.hub.start().done(function () {
                 var current_room = "general" + "@ViewBag.Servername";
+                
                 makeRooms();
                 var x = document.getElementsByClassName(current_room.replace("@ViewBag.Servername", "").replace(/\s/g, '-'));
 
-                console.log("Looking for class " + current_room.replace("@ViewBag.Servername", ""))
+               // console.log("Looking for class " + current_room.replace("@ViewBag.Servername", ""))
                 for (i = 0; i < x.length; i++) {
                     x[i].removeAttribute('hidden');
-                    console.log("Removed hidden");
+                    //console.log("Removed hidden");
                 }
                 chat.server.getRooms("@ViewBag.Servername");
+
                 fillRooms();
                 chat.server.join(current_room);
                 chat.server.notify($('#nickname').val(), $.connection.hub.id, current_room);
-                chat.server.load(current_room.replace("@ViewBag.Servername", ""), "@ViewBag.Servername", $.connection.hub.id);
 
-                console.log("Current in room: " + current_room);
+                loaded_messages = 0;
+                chat.server.load(current_room.replace("@ViewBag.Servername", ""), "@ViewBag.Servername", $.connection.hub.id, 0, 10)
+                    .done(function (result) { last_loaded_id = result; loaded_messages += 10; });
+                    ;
+
+                //console.log("Current in room: " + current_room);
+
+
+                $('.room').find(".messages:visible").scroll(function () {
+                    console.log("Scrolling....")
+                    if (this.scrollTop == 0) {
+                        var current_top_element = $(this).children().first();
+
+                        console.log(current_top_element);
+                        console.log(current_top_element.outerHeight());
+                        chat.server.load(current_room.replace("@ViewBag.Servername", ""), "@ViewBag.Servername", $.connection.hub.id, last_loaded_id, 10)
+                            .done(function (result) { last_loaded_id = result; loaded_messages += 10; });
+
+                        $('.room').find(".messages:visible")[0].scrollTop = current_top_element.outerHeight();
+                    }
+                });
 
                 $('.room').find('#btn-send').click(function () {
                     //if ($("#users").val() == "All") {
@@ -505,7 +570,7 @@
 
                 $('.room').find("#btn-file").click(function () {
                     $("#uploadModal").modal('show');
-                    console.log("Send file clicked");
+                    //console.log("Send file clicked");
                 });
 
                 $('#logout').click(function () {
@@ -513,11 +578,11 @@
                 });
 
                 leave_current_room = function () {
-                    console.log("Leaving room " + current_room);
+                    //console.log("Leaving room " + current_room);
                     var x = document.getElementsByClassName(current_room.replace("@ViewBag.Servername", "").replace(/\s/g, '-'));
                     $("." + current_room.replace("@ViewBag.Servername", "").replace(/\s/g, '-') + ' #chatlog > .msg').remove();
 
-                    console.log("Looking for class " + current_room.replace("@ViewBag.Servername", "").replace(/\s/g, '-'));
+                    //console.log("Looking for class " + current_room.replace("@ViewBag.Servername", "").replace(/\s/g, '-'));
                     for (i = 0; i < x.length; i++) {
                         x[i].setAttribute('hidden', true);
                         console.log("added hidden");
@@ -529,12 +594,13 @@
 
                 $(".room-link").click(function (e) {
                     leave_current_room();
+                    loaded_messages = 0;
 
                     var childs = document.getElementById("chats").children;
 
                     for (i = 0; i < childs.length; i++) {
                         childs[i].setAttribute('hidden', true);
-                        console.log("added hidden");
+                        //console.log("added hidden");
                     }
 
                     console.log("Joining room " + $(e.target).text());
@@ -544,11 +610,14 @@
                     console.log("Looking for class " + current_room.replace("@ViewBag.Servername", "").replace(/\s/g, '-'));
                     for (i = 0; i < x.length; i++) {
                         x[i].removeAttribute('hidden');
-                        console.log("removed hidden");
+                        //console.log("removed hidden");
                     }
                     chat.server.join(current_room);
                     chat.server.notify($('#nickname').val(), $.connection.hub.id, current_room);
-                    chat.server.load(current_room.replace("@ViewBag.Servername", ""), "@ViewBag.Servername", $.connection.hub.id);
+                    var lastid = chat.server.load(current_room.replace("@ViewBag.Servername", ""), "@ViewBag.Servername", $.connection.hub.id, 0, 10)
+                        .done(function (result) { last_loaded_id = result; loaded_messages += 10;  });
+                    //console.log("Last message id:");
+                    //console.log(lastid);
                 });
 
                 $("#new-room").click(function () {
@@ -579,7 +648,7 @@
                 $('.room').find(".message").on("keydown", function (e) {
                     if (e.which == 13) {
                         //if ($("#users").val() == "All") {
-                        console.log(e.target);
+                        //console.log(e.target);
                         chat.server.send($('#nickname').val(), $(e.target).val(), current_room);
                         /*}
                         else {
@@ -595,7 +664,7 @@
 
                     e.preventDefault();
                     var formData = new FormData(this);
-                    console.log(formData);
+                    //console.log(formData);
 
                     $.ajax({
                         url: '/Home/UploadFile',
@@ -714,7 +783,7 @@
                                     fullday: event.allDay
 
                                 };
-                                console.log(data);
+                                //console.log(data);
                                 SaveEvent(data);
                             }
                         })

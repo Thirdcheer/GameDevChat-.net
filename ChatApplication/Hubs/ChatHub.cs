@@ -36,29 +36,33 @@ namespace ChatApplication.Hubs
             return Groups.Remove(Context.ConnectionId, roomName);
         }
 
+        public string processMessage(string message)
+        {
+            return message.Replace("'", "''");
+        }
         public void Send(string name, string message, string roomname)
         {
             Trace.WriteLine("From: " + name + " message: " + message + " in " + roomname);
-            dl.saveMessage(message, roomname, name);
-            Clients.Group(roomname).broadcastMessage(name, message, roomname, String.Format("{0:g}", DateTime.Now));
+            dl.saveMessage(processMessage(message), roomname, name);
+            Clients.Group(roomname).broadcastMessage(name, message, roomname, String.Format("{0:g}", DateTime.Now), false);
         }
 
         public void SendToSpecific(string name, string message, string to)
         {
             Clients.Caller.broadcastMessage(name, message);
-            Clients.Client(dic[to]).broadcastMessage(name, message, DateTime.Now);
+            Clients.Client(dic[to]).broadcastMessage(name, message, DateTime.Now, false);
         }
 
         public void Sendimage(string name, string imagelink, string roomname)
         {
-            dl.saveMessage("imagesrc: " + imagelink, roomname, name);
-            Clients.Group(roomname).broadcastImage(name, imagelink, roomname, String.Format("{0:g}", DateTime.Now));
+            dl.saveMessage("imagesrc: " + processMessage(imagelink), roomname, name);
+            Clients.Group(roomname).broadcastImage(name, imagelink, roomname, String.Format("{0:g}", DateTime.Now), false);
         }
 
         public void Sendfile(string name, string filesrc, string roomname)
         {
-            dl.saveMessage("filesrc: " + filesrc, roomname, name);
-            Clients.Group(roomname).broadcastFile(name, filesrc, roomname, String.Format("{0:g}", DateTime.Now));
+            dl.saveMessage("filesrc: " + processMessage(filesrc), roomname, name);
+            Clients.Group(roomname).broadcastFile(name, filesrc, roomname, String.Format("{0:g}", DateTime.Now), false);
         }
 
         public void Notify(string name, string id, string roomname)
@@ -74,6 +78,7 @@ namespace ChatApplication.Hubs
                 Clients.Group(roomname).enters(name, roomname);
             }
         }
+        
 
         public override Task OnDisconnected(bool stopCalled)
         {
@@ -93,19 +98,56 @@ namespace ChatApplication.Hubs
             {
                 if (message.message.Contains("imagesrc:"))
                 {
-                    Clients.Client(connID).broadcastImage(dl.getUser(message.senderid).username, message.message.Replace("imagesrc: ", ""), roomname, String.Format("{0:g}", message.msgdate));
+                    Clients.Client(connID).broadcastImage(dl.getUser(message.senderid).username, message.message.Replace("imagesrc: ", ""), roomname, String.Format("{0:s}", message.msgdate), true);
 
                 }
                 else if (message.message.Contains("filesrc:"))
                 {
-                    Clients.Client(connID).broadcastFile(dl.getUser(message.senderid).username, message.message.Replace("filesrc: ", ""), roomname, String.Format("{0:g}", message.msgdate));
+                    Clients.Client(connID).broadcastFile(dl.getUser(message.senderid).username, message.message.Replace("filesrc: ", ""), roomname, String.Format("{0:s}", message.msgdate), true);
 
                 }
                 else
                 {
-                    Clients.Client(connID).broadcastMessage(dl.getUser(message.senderid).username, message.message, roomname, String.Format("{0:g}", message.msgdate));
+                    Clients.Client(connID).broadcastMessage(dl.getUser(message.senderid).username, message.message, roomname, String.Format("{0:s}", message.msgdate), true);
                 }
             }
+            Clients.Client(connID).scrollDown();
         }
+
+
+        public int Load(string roomname, string servername, string connID, int from, int count)
+        {
+            List<MessageModel> messages = dl.getMessagesAboveId(roomname, servername, from, count);
+            int lastid = 0;
+
+            foreach (MessageModel message in messages)
+            {
+                if (message.message.Contains("imagesrc:"))
+                {
+                    Clients.Client(connID).broadcastImage(dl.getUser(message.senderid).username, message.message.Replace("imagesrc: ", ""), roomname, String.Format("{0:s}", message.msgdate), true);
+
+                }
+                else if (message.message.Contains("filesrc:"))
+                {
+                    Clients.Client(connID).broadcastFile(dl.getUser(message.senderid).username, message.message.Replace("filesrc: ", ""), roomname, String.Format("{0:s}", message.msgdate), true);
+
+                }
+                else
+                {
+                    Clients.Client(connID).broadcastMessage(dl.getUser(message.senderid).username, message.message, roomname, String.Format("{0:s}", message.msgdate), true);
+                }
+
+                lastid = message.id;
+
+            }
+            if(from == 0)
+            {
+                Clients.Client(connID).scrollDown();
+            }
+            
+            return lastid;
+        }
+
+        
     }
 }

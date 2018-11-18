@@ -98,17 +98,17 @@ namespace ChatApplication.Hubs
             {
                 if (message.message.Contains("imagesrc:"))
                 {
-                    Clients.Client(connID).broadcastImage(dl.getUser(message.senderid).username, message.message.Replace("imagesrc: ", ""), roomname, String.Format("{0:s}", message.msgdate), true);
+                    Clients.Client(connID).broadcastImage(dl.getUser(message.senderid).username, message.message.Replace("imagesrc: ", ""), roomname, String.Format("{0:g}", message.msgdate), true);
 
                 }
                 else if (message.message.Contains("filesrc:"))
                 {
-                    Clients.Client(connID).broadcastFile(dl.getUser(message.senderid).username, message.message.Replace("filesrc: ", ""), roomname, String.Format("{0:s}", message.msgdate), true);
+                    Clients.Client(connID).broadcastFile(dl.getUser(message.senderid).username, message.message.Replace("filesrc: ", ""), roomname, String.Format("{0:g}", message.msgdate), true);
 
                 }
                 else
                 {
-                    Clients.Client(connID).broadcastMessage(dl.getUser(message.senderid).username, message.message, roomname, String.Format("{0:s}", message.msgdate), true);
+                    Clients.Client(connID).broadcastMessage(dl.getUser(message.senderid).username, message.message, roomname, String.Format("{0:g}", message.msgdate), true);
                 }
             }
             Clients.Client(connID).scrollDown();
@@ -124,17 +124,17 @@ namespace ChatApplication.Hubs
             {
                 if (message.message.Contains("imagesrc:"))
                 {
-                    Clients.Client(connID).broadcastImage(dl.getUser(message.senderid).username, message.message.Replace("imagesrc: ", ""), roomname, String.Format("{0:s}", message.msgdate), true);
+                    Clients.Client(connID).broadcastImage(dl.getUser(message.senderid).username, message.message.Replace("imagesrc: ", ""), roomname, String.Format("{0:g}", message.msgdate), true);
 
                 }
                 else if (message.message.Contains("filesrc:"))
                 {
-                    Clients.Client(connID).broadcastFile(dl.getUser(message.senderid).username, message.message.Replace("filesrc: ", ""), roomname, String.Format("{0:s}", message.msgdate), true);
+                    Clients.Client(connID).broadcastFile(dl.getUser(message.senderid).username, message.message.Replace("filesrc: ", ""), roomname, String.Format("{0:g}", message.msgdate), true);
 
                 }
                 else
                 {
-                    Clients.Client(connID).broadcastMessage(dl.getUser(message.senderid).username, message.message, roomname, String.Format("{0:s}", message.msgdate), true);
+                    Clients.Client(connID).broadcastMessage(dl.getUser(message.senderid).username, message.message, roomname, String.Format("{0:g}", message.msgdate), true);
                 }
 
                 lastid = message.id;

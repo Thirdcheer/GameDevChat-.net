@@ -376,6 +376,13 @@
 
             chat.client.broadcastMessage = function (name, message, roomname, time, loaded) {
                 if (message != "") {
+
+                    console.log(document.hasFocus());
+                    if (!document.hasFocus() && !loaded) {
+                        var audio = new Audio('/Content/pull-out.mp3');
+                        audio.play();
+                    }
+
                     message = message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
                     //console.log(roomname);
                     var funkcja; 
@@ -414,7 +421,14 @@
 
 
             chat.client.broadcastImage = function (name, message, roomname, time, loaded) {
+                
+
                 if (message != "") {
+                    if (!document.hasFocus() && !loaded) {
+                        var audio = new Audio('/Content/pull-out.mp3');
+                        audio.play();
+                    }
+
                     //console.log(roomname);
                     var funkcja;
                     if (loaded) {

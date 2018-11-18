@@ -65,6 +65,11 @@ namespace ChatApplication.Controllers
         [Authorize]
         public ActionResult Index()
         {
+            if (dl.getUserServer(User.Identity.Name) == null)
+            {
+                return RedirectToAction("serverjoin");
+            }
+
             ViewBag.Username = System.Web.HttpContext.Current.User.Identity.Name;
             ViewBag.Servername = dl.getServerName(ViewBag.Username);
             ViewBag.Userrole = dl.getUser(System.Web.HttpContext.Current.User.Identity.Name).role;
@@ -135,7 +140,6 @@ namespace ChatApplication.Controllers
                 ViewData["msg"] = "invalid Email or Password...";
                 return View();
             }
-
         }
 
         [HttpPost]
@@ -155,12 +159,14 @@ namespace ChatApplication.Controllers
                 Session["username"] = user.username;
                 Session["userid"] = user.userid.ToString();
                 FormsAuthentication.SetAuthCookie(username, false);
+                ViewBag.NewUser = true;
                 return RedirectToAction("serverjoin", "Home");
             }
             else
             {
                 ViewData["status"] = 2;
                 ViewData["msg"] = "User with that email already exists";
+                ViewBag.NewUser = false;
                 return View();
             }
 
@@ -171,6 +177,19 @@ namespace ChatApplication.Controllers
                 var events = dl.getEvents(System.Web.HttpContext.Current.User.Identity.Name);
                 return new JsonResult { Data = events, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
             
+        }
+
+        [HttpPost]
+        public JsonResult emailExists(string email)
+        {
+            List<string> emails = dl.checkEmail();
+            bool exists = false;
+
+            if (emails.Contains(email)){
+                exists = true;
+            }
+
+            return new JsonResult { Data = exists, JsonRequestBehavior = JsonRequestBehavior.AllowGet};
         }
 
         [HttpPost]
@@ -223,6 +242,7 @@ namespace ChatApplication.Controllers
         [HttpPost]
         public ActionResult serverjoin(FormCollection fc)
         {
+           
             if (fc.AllKeys.Contains("name"))
             {
                 ServerModel server = dl.addServer(fc["name"], User.Identity.Name);
@@ -241,6 +261,7 @@ namespace ChatApplication.Controllers
                 return RedirectToAction("Index", "Home");
             }
             return View();
+            
         }
 
         [Authorize]

@@ -15,6 +15,7 @@ body{
     padding:0;
 }
 
+
 .container{
     background: rgba(25, 34, 49, 0.7);
     border-radius: 10px;
@@ -31,6 +32,7 @@ body{
     bottom:20px;
     font-size:13px;
     text-align:center;
+
 }
 
 .login-section .banner-text i {

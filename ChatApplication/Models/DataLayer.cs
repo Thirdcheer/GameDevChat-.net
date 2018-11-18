@@ -173,6 +173,30 @@ namespace ChatApplication.Models
 
             return user;
         }
+
+        public List<string> checkEmail()
+        {
+            UserModel user = new UserModel();
+
+            DataTable dt = new DataTable();
+            DataSet ds = new DataSet();
+            string sql = String.Format("select email from {0}", login_table);
+            NuoDbDataAdapter da = new NuoDbDataAdapter(sql, con);
+
+            List<string> emails = new List<string>();
+
+            ds.Reset();
+            da.Fill(ds);
+            dt = ds.Tables[0];
+
+            foreach (DataRow row in dt.Rows)
+            {
+                emails.Add(row["email"].ToString());
+            }
+
+            return emails;
+        }
+
         public ServerModel getUserServer(string username)
         {
             UserModel user = getUser(username);
@@ -184,11 +208,16 @@ namespace ChatApplication.Models
             da.Fill(ds);
             dt = ds.Tables[0];
 
-            int serverid = 0;
+            int serverid = -1;
 
             foreach (DataRow row in dt.Rows)
             {
                 serverid = Convert.ToInt32(row["serverid"]);
+            }
+
+            if(serverid == -1)
+            {
+                return null;
             }
 
             dt = new DataTable();

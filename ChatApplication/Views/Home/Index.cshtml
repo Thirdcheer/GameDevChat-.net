@@ -542,9 +542,10 @@
                     ;
 
                 //console.log("Current in room: " + current_room);
+                
 
-
-                $('.room').find(".messages:visible").scroll(function () {
+               
+                lazyscroll = function () {
                     console.log("Scrolling....")
                     if (this.scrollTop == 0) {
                         var current_top_element = $(this).children().first();
@@ -552,11 +553,13 @@
                         console.log(current_top_element);
                         console.log(current_top_element.outerHeight());
                         chat.server.load(current_room.replace("@ViewBag.Servername", ""), "@ViewBag.Servername", $.connection.hub.id, last_loaded_id, 10)
-                            .done(function (result) { last_loaded_id = result; loaded_messages += 10; });
+                            .done(function (result) { last_loaded_id = result; loaded_messages += 10; console.log("added messages") });
 
                         $('.room').find(".messages:visible")[0].scrollTop = current_top_element.outerHeight();
                     }
-                });
+                };
+
+                $('.room').find(".messages:visible").bind('scroll', lazyscroll);
 
                 $('.room').find('#btn-send').click(function () {
                     //if ($("#users").val() == "All") {
@@ -614,8 +617,11 @@
                     }
                     chat.server.join(current_room);
                     chat.server.notify($('#nickname').val(), $.connection.hub.id, current_room);
+                    $('.room').find(".messages:visible").unbind('scroll', lazyscroll);
                     var lastid = chat.server.load(current_room.replace("@ViewBag.Servername", ""), "@ViewBag.Servername", $.connection.hub.id, 0, 10)
-                        .done(function (result) { last_loaded_id = result; loaded_messages += 10;  });
+                        .done(function (result) {
+                            last_loaded_id = result; loaded_messages += 10;
+                            $('.room').find(".messages:visible").bind('scroll', lazyscroll); });
                     //console.log("Last message id:");
                     //console.log(lastid);
                 });

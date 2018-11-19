@@ -82,6 +82,9 @@
                         if (data) {
                             input.setCustomValidity('User with this email already exists');
                         }
+                        else {
+                            input.setCustomValidity('');
+                        }
                     },
                     error: function (error) {
                         alert('failed');

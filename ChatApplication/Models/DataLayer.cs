@@ -84,26 +84,20 @@ namespace ChatApplication.Models
         public ServerModel addServer(string name, string username)
         {
             ServerModel server = new ServerModel(name);
-            DataTable dt = new DataTable();
-            DataSet ds = new DataSet();
-            string sql = String.Format("select 1 from {0} where name='{1}'", server_table, name);
-            NuoDbDataAdapter da = new NuoDbDataAdapter(sql, con);
-
             UserModel user = getUser(username);
+            
 
-            ds.Reset();
-            da.Fill(ds);
-            dt = ds.Tables[0];
-
-            if (dt.Rows.Count == 0)
+            if (serverExists(name))
             {
+                DataTable dt = new DataTable();
+                DataSet ds = new DataSet();
                 NuoDbCommand nuocmd = new NuoDbCommand(String.Format("insert {0} (name, created, joinstring) values ('{1}', '{2}', '{3}')", server_table, server.name, server.created, server.joinString), con);
                 con.Open();
                 nuocmd.ExecuteNonQuery();
                 con.Close();
 
-                sql = String.Format("select {0} from {1} where name='{2}'", "id", server_table, name);
-                da = new NuoDbDataAdapter(sql, con);
+                string sql = String.Format("select {0} from {1} where name='{2}'", "id", server_table, name);
+                NuoDbDataAdapter da = new NuoDbDataAdapter(sql, con);
                 ds.Reset();
                 da.Fill(ds);
                 dt = ds.Tables[0];
@@ -126,6 +120,25 @@ namespace ChatApplication.Models
                 return null;
             }
 
+        }
+
+        public bool serverExists(string servername)
+        {
+            ServerModel server = new ServerModel(servername);
+            DataTable dt = new DataTable();
+            DataSet ds = new DataSet();
+            string sql = String.Format("select 1 from {0} where name='{1}'", server_table, servername);
+            NuoDbDataAdapter da = new NuoDbDataAdapter(sql, con);
+            
+
+            ds.Reset();
+            da.Fill(ds);
+            dt = ds.Tables[0];
+
+            if (dt.Rows.Count == 0)
+                return false;
+            else
+                return true;
         }
 
         public UserModel getUser(string name)

@@ -16,15 +16,14 @@
     <link rel="stylesheet" runat="server" media="screen" href="~/Content/css/sidebar.css" />
 </head>
 <body>
-    @using (Html.BeginForm())
-    {
+ 
         @Html.AntiForgeryToken()
         <section class="login-block">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-6 login-section">
+                    <div class="col-md-6 login-section ">
                         <h2 class="text-center">Create server...</h2>
-                        <form class="login-form" method="post">
+                        <form  class="login-form" method="post">
                             <div class="form-group">
                                 <label for="name">Name</label>
                                 <input type="text" id="name" name="name" class="form-control" required />
@@ -34,9 +33,10 @@
                             </div>
                         </form>
                     </div>
+                    
                     <div class="col-md-6 login-section">
                         <h2 class="text-center">or join one!</h2>
-                        <form class="login-form" method="post">
+                        <form  class="login-form" method="post">
                             <div class="form-group">
                                 <label for="joinString">Server join string</label>
                                 <input type="text" id="joinstring" name="joinstring" class="form-control" required />
@@ -49,6 +49,6 @@
                 </div>
             </div>
         </section>
-    }
+    
 </body>
 </html>

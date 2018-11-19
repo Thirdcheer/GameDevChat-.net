@@ -193,6 +193,14 @@ namespace ChatApplication.Controllers
         }
 
         [HttpPost]
+        public JsonResult serverExists(string servername)
+        {
+            bool exists = dl.serverExists(servername);
+            return new JsonResult { Data = exists, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+
+        [HttpPost]
         public JsonResult SaveEvent(EventModel e)
                 {
                     var status = false;
@@ -252,6 +260,7 @@ namespace ChatApplication.Controllers
                     ViewData["msg"] = "server added";
                     return RedirectToAction("Index", "Home");
                 }
+
             }
             else if (fc.AllKeys.Contains("joinstring"))
             {
@@ -263,6 +272,8 @@ namespace ChatApplication.Controllers
             return View();
             
         }
+
+
 
         [Authorize]
         [HttpPost]

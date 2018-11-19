@@ -57,13 +57,6 @@
                             <ul id="rooms"></ul>
                         </div>
                     </li>
-                    <li>
-                        <a href="#">
-                            <i class="far fa-envelope"></i>
-                            <span>Private messages</span>
-                            <span class="badge badge-pill badge-primary">3</span>
-                        </a>
-                    </li>
                     <li class="sidebar-dropdown">
                         <a href="#">
                             <i class="fas fa-cog"></i>
@@ -96,18 +89,7 @@
                             <span>Calendar</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="#">
-                            <i class="fas fa-calendar-alt"></i>
-                            <span>Tasks dashboard</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="fas fa-image"></i>
-                            <span>Gallery</span>
-                        </a>
-                    </li>
+
                 </ul>
                 <ul id="onlineusers" class="onlineusers">
                     <li class="header-menu">
@@ -194,7 +176,7 @@
                 </div>
             </div>
 
-            
+
 
             <div id="modal-update" class="modal fade" role="dialog">
                 <div class="modal-dialog">
@@ -204,6 +186,13 @@
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h4 class="modal-title"><span id="eventTitle"></span></h4>
                             <hr />
+                                <label><b>Start</b></label><br />
+                                <p id="start"></p><br />
+                                <label><b>End</b></label><br />
+                                <p id="end"></p><br />
+                                <label><b>Description</b></label><br />
+                                <p  id="desc"></p><br />
+                            
                             <br />
                             <button id="btnDelete" class="btn btn-default btn-sm pull-right">
                                 <span class="glyphicon glyphicon-remove"></span> Remove
@@ -211,9 +200,6 @@
                             <button id="btnEdit" class="btn btn-default btn-sm pull-right" style="margin-right:5px;">
                                 <span class="glyphicon glyphicon-pencil"></span> Edit
                             </button>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>
@@ -223,10 +209,12 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-body">
+
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h4 class="modal-title">Save Event</h4>
                             <hr />
                             <br />
+                            <div id="event-preview"></div>
                             <form class="form-horizontal">
                                 <input type="hidden" id="hdEventID" value="0" />
                                 <div class="form-group">
@@ -236,10 +224,8 @@
                                 <div class="form-group">
                                     <label>Start</label>
                                     <div class="input-group date" id="dtp1">
-                                        <input type="text" id="txtStart" class="form-control" />
-                                        <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-calendar"></span>
-                                        </span>
+                                        <input type="datetime-local" id="txtStart" class="form-control" size="15" />
+
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -250,10 +236,7 @@
                                 <div class="form-group" id="divEndDate" style="display:none">
                                     <label>End</label>
                                     <div class="input-group date" id="dtp2">
-                                        <input type="text" id="txtEnd" class="form-control" />
-                                        <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-calendar"></span>
-                                        </span>
+                                        <input type="datetime-local" id="txtEnd" class="form-control" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -270,8 +253,7 @@
                                         <option value="green">Green</option>
                                     </select>
                                 </div>
-                                <button type="button" id="btnSave" class="btn btn-success">Save</button>
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="button" id="btnSave" class="btn float-right">Save</button>
                             </form>
                         </div>
                     </div>
@@ -296,22 +278,21 @@
 @section scripts {
     <!--Reference the SignalR library. -->
     <script src="~/Scripts/jquery.signalR-2.3.0.min.js"></script>
+
     <link rel="stylesheet" runat="server" media="screen" href="~/Content/css/base.css" />
     <link rel="stylesheet" runat="server" media="screen" href="~/Content/css/calendar.css" />
     <link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.css" rel="stylesheet" />
     <link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.print.css" rel="stylesheet" media="print" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 
     <script src="~/Content/js/sidebar.js" type="text/javascript"></script>
-    <!--Reference the autogenerated SignalR hub script. -->
     <script src="~/signalr/hubs"></script>
-    <!--Add script to update the page and send messages.-->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
 
     <script>
+
+
         $(function () {
             startChatHub();
         });
@@ -385,7 +366,7 @@
 
                     message = message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
                     //console.log(roomname);
-                    var funkcja; 
+                    var funkcja;
                     if (loaded) {
                         funkcja = function (node, message) {
                             node.prepend(message);
@@ -421,7 +402,7 @@
 
 
             chat.client.broadcastImage = function (name, message, roomname, time, loaded) {
-                
+
 
                 if (message != "") {
                     if (!document.hasFocus() && !loaded) {
@@ -503,7 +484,7 @@
                     }
 
                     if (!loaded) {
-                        
+
                         $(".messages:visible")[0].scrollTop = $(".messages:visible")[0].scrollHeight - $(".messages:visible")[0].clientHeight;
                         //console.log("File broadcasted to: " + roomname.replace("@ViewBag.Servername", ""));
                     }
@@ -535,7 +516,7 @@
 
             $.connection.hub.start().done(function () {
                 var current_room = "general" + "@ViewBag.Servername";
-                
+
                 makeRooms();
                 var x = document.getElementsByClassName(current_room.replace("@ViewBag.Servername", "").replace(/\s/g, '-'));
 
@@ -556,9 +537,9 @@
                     ;
 
                 //console.log("Current in room: " + current_room);
-                
 
-               
+
+
                 lazyscroll = function () {
                     console.log("Scrolling....")
                     if (this.scrollTop == 0) {
@@ -678,7 +659,7 @@
                     }
 
                 });
-               
+
 
                 $("#upload-form").on('submit', function (e) {
 
@@ -753,7 +734,8 @@
                         $('#calendar').fullCalendar({
                             contentHeight: 800,
                             defaultDate: new Date(),
-                            timeFormat: 'h(:mm)a',
+                            timeFormat: 'H(:mm)',
+                            timezone: 'local',
                             header: {
                                 left: 'prev,next today',
                                 center: 'title',
@@ -767,14 +749,10 @@
                                 selectedEvent = calEvent;
 
                                 $('#modal-update #eventTitle').text(calEvent.title);
-                                var $description = $('<div/>');
-                                $description.append($('<p/>').html('<b>Start:</b>' + calEvent.start.format("DD-MMM-YYYY HH:mm a")));
-                                if (calEvent.end != null) {
-                                    $description.append($('<p/>').html('<b>End:</b>' + calEvent.end.format("DD-MMM-YYYY HH:mm a")));
-                                }
-                                $description.append($('<p/>').html('<b>Description:</b>' + calEvent.description));
-                                $('#modal-update #pDetails').empty().html($description);
-
+                                $('#modal-update #start').text(calEvent.start.format('dddd, MMMM Do YYYY HH:mm'));
+                                $('#modal-update #end').text(calEvent.end.format('dddd, MMMM Do YYYY HH:mm'));
+                                console.log(calEvent.start.toDate());
+                                $('#modal-update #desc').text(calEvent.description);
                                 $('#modal-update').modal();
                             },
                             selectable: true,
@@ -796,8 +774,8 @@
                                 var data = {
                                     id: event.eventID,
                                     subject: event.title,
-                                    startdate: event.format('DD/MM/YYYY HH:mm A'),
-                                    enddate: event.end != null ? event.end.format('DD/MM/YYYY HH:mm A') : null,
+                                    startdate: event.start.format('dddd, MMMM Do YYYY HH:mm'),
+                                    enddate: event.end != null ? event.end.format('dddd, MMMM Do YYYY HH:mm') : null,
                                     description: event.description,
                                     themecolor: event.color,
                                     fullday: event.allDay
@@ -834,9 +812,7 @@
                         }
                     });
 
-                    $('#dtp1,#dtp2').datetimepicker({
-                        format: 'DD/MM/YYYY HH:mm A'
-                    });
+                    //$('#dtp1,#dtp2').datetimepicker();
 
                     $('#chkIsFullDay').change(function () {
                         if ($(this).is(':checked')) {
@@ -851,16 +827,49 @@
                         if (selectedEvent != null) {
                             $('#hdEventID').val(selectedEvent.eventID);
                             $('#txtSubject').val(selectedEvent.title);
-                            $('#txtStart').val(selectedEvent.start.format('DD/MM/YYYY HH:mm A'));
+                            $('#txtStart').val(moment(selectedEvent.start).format('dddd, MMMM Do YYYY HH:mm'));
                             $('#chkIsFullDay').prop("checked", selectedEvent.allDay || false);
                             $('#chkIsFullDay').change();
-                            $('#txtEnd').val(selectedEvent.end != null ? selectedEvent.end.format('DD/MM/YYYY HH:mm A') : '');
+                            $('#txtEnd').val(selectedEvent.end != null ? moment(selectedEvent.end).format('dddd, MMMM Do YYYY HH:mm') : '');
                             $('#txtDescription').val(selectedEvent.description);
                             $('#ddThemeColor').val(selectedEvent.color);
+
+                            $('#modal-update').modal('hide');
+                            $('#modal-save').modal();
+                            $('#modal-save #event-preview').empty();
+
+                            console.log(selectedEvent);
+
+                            if (selectedEvent.title != "") {
+
+                                $("#modal-save #event-preview").append('<div id="preview"><label><b>Start</b></label><br/>' +
+                                    '<p id = "start" ></p> <br />' +
+                                    '<label><b>End</b></label> <br/>' +
+                                    '<p id="end"></p> <br /></div>');
+
+
+                                $('#modal-save #start').text(selectedEvent.start.format('dddd, MMMM Do YYYY HH:mm'));
+                                $('#modal-save #end').text(selectedEvent.end.format('dddd, MMMM Do YYYY HH:mm'));
+                                $('#modal-save .modal-title').text(selectedEvent.title);
+                            }
+                            else {
+
+                                $('#modal-save .modal-title').text("Save event");
+                            }
                         }
-                        $('#modal-update').modal('hide');
-                        $('#modal-save').modal();
+                        else {
+                            $('#modal-update').modal('hide');
+                            $('#modal-save').modal();
+                            $('#modal-save #event-preview').empty();
+                            $('#modal-save .modal-title').text("Save event");
+                        }
+                        
                     };
+
+                    $('#modal-save').on('hidden.bs.modal', function () {
+
+                        $('#modal-save #event-preview').empty();
+                    })
 
                     $('#btnSave').click(function () {
                         //Validation/
@@ -907,6 +916,7 @@
                                 if (data.status) {
                                     //Refresh the calender
                                     FetchEventAndRenderCalendar();
+                                    $("#event-preview #preview").remove();
                                     $('#modal-save').modal('hide');
                                 }
                             },

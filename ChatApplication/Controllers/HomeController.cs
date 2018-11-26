@@ -15,27 +15,29 @@ namespace ChatApplication.Controllers
         DataLayer dl = new DataLayer();
 
         [HttpPost]
-        public ActionResult Index(FormCollection fc) 
+        public ActionResult Index(string roomname) 
         {
             ViewBag.Username = System.Web.HttpContext.Current.User.Identity.Name;
             ViewBag.Servername = dl.getServerName(ViewBag.Username);
             ViewBag.Userrole = dl.getUser(ViewBag.Username).role;
+            ViewBag.Rooms = dl.getRoomsNames(ViewBag.Servername);
 
-            string name = fc["roomname"].ToString();
-            int capacity = Convert.ToInt32(fc["capacity"]);
-            RoomModel room = dl.addRoom(name, ViewBag.Servername, capacity);
+            var status = true;
+            
+            RoomModel room = dl.addRoom(roomname, ViewBag.Servername);
             if (room != null)
             {
                 ViewData["status"] = 1;
                 ViewData["msg"] = "room added...";
-                return RedirectToAction("Index");
+               
             }
             else
             {
                 ViewData["status"] = 2;
                 ViewData["msg"] = "cannot add room";
-                return View();
+                status = false;
             }
+            return RedirectToAction("Index");
 
         }
 
@@ -119,18 +121,18 @@ namespace ChatApplication.Controllers
         [HttpPost]
         public ActionResult login(FormCollection fc)
         {
-            string username = fc["username"].ToString();
+            string email = fc["email"].ToString();
             string password = fc["password"].ToString();
-            UserModel user = dl.login(username, password);
+            UserModel user = dl.login(email, password);
 
-            if (user.userid > 0)
+            if (user.id > 0)
             {
                 ViewData["status"] = 1;
                 ViewData["msg"] = "login Successful...";
                 ViewBag.Username = user.username;
-                FormsAuthentication.SetAuthCookie(username, false);
+                FormsAuthentication.SetAuthCookie(dl.getUserByEmail(email).username, false);
                 Session["username"] = user.username;
-                Session["userid"] = user.userid.ToString();
+                Session["userid"] = user.id.ToString();
                 return RedirectToAction("Index");
             }
             else
@@ -157,7 +159,7 @@ namespace ChatApplication.Controllers
                 ViewData["status"] = 1;
                 ViewData["msg"] = "user registered";
                 Session["username"] = user.username;
-                Session["userid"] = user.userid.ToString();
+                Session["userid"] = user.id.ToString();
                 FormsAuthentication.SetAuthCookie(username, false);
                 ViewBag.NewUser = true;
                 return RedirectToAction("serverjoin", "Home");
@@ -215,14 +217,14 @@ namespace ChatApplication.Controllers
                                 v.enddate = e.enddate;
                                 v.description = e.description;
                                 v.fullday = e.fullday;
-                                v.themecolor = e.themecolor;
-                                v.userid = dl.getUser(System.Web.HttpContext.Current.User.Identity.Name).userid;
+                                v.color = e.color;
+                                v.serverid = dl.getUserServer(System.Web.HttpContext.Current.User.Identity.Name).id;
                                 dl.updateEvent(v);
                             }
                         }
                         else
                         {
-                e.userid = dl.getUser(System.Web.HttpContext.Current.User.Identity.Name).userid;
+                e.serverid = dl.getUserServer(System.Web.HttpContext.Current.User.Identity.Name).id;
                 dl.addEvent(e);
                         }
                         status = true;
@@ -266,6 +268,11 @@ namespace ChatApplication.Controllers
             {
                 ServerModel server = dl.joinServer(fc["joinstring"], User.Identity.Name);
                 ViewData["status"] = 1;
+                if(server == null)
+                {
+                    ViewData["msg"] = "Server with that joinsstring does not exists";
+                    return View();
+                }
                 ViewData["msg"] = "joined to server " + server.name;
                 return RedirectToAction("Index", "Home");
             }

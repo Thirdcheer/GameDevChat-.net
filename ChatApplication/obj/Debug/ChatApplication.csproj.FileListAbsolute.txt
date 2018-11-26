@@ -332,7 +332,6 @@ C:\Users\karol\Desktop\GameDevChat\GameDevChat-.net\ChatApplication\bin\System.W
 C:\Users\karol\Desktop\GameDevChat\GameDevChat-.net\ChatApplication\bin\System.Web.WebPages.Razor.dll
 C:\Users\karol\Desktop\GameDevChat\GameDevChat-.net\ChatApplication\bin\Thrift.dll
 C:\Users\karol\Desktop\GameDevChat\GameDevChat-.net\ChatApplication\bin\WebGrease.dll
-C:\Users\karol\Desktop\GameDevChat\GameDevChat-.net\ChatApplication\bin\Mono.Security.dll
 C:\Users\karol\Desktop\GameDevChat\GameDevChat-.net\ChatApplication\bin\CsQuery.xml
 C:\Users\karol\Desktop\GameDevChat\GameDevChat-.net\ChatApplication\bin\EntityFramework.xml
 C:\Users\karol\Desktop\GameDevChat\GameDevChat-.net\ChatApplication\bin\EntityFramework.SqlServer.xml
@@ -351,8 +350,6 @@ C:\Users\karol\Desktop\GameDevChat\GameDevChat-.net\ChatApplication\bin\Microsof
 C:\Users\karol\Desktop\GameDevChat\GameDevChat-.net\ChatApplication\bin\Microsoft.Owin.Host.SystemWeb.xml
 C:\Users\karol\Desktop\GameDevChat\GameDevChat-.net\ChatApplication\bin\Microsoft.Owin.Security.xml
 C:\Users\karol\Desktop\GameDevChat\GameDevChat-.net\ChatApplication\bin\Newtonsoft.Json.xml
-C:\Users\karol\Desktop\GameDevChat\GameDevChat-.net\ChatApplication\bin\Npgsql.pdb
-C:\Users\karol\Desktop\GameDevChat\GameDevChat-.net\ChatApplication\bin\Npgsql.xml
 C:\Users\karol\Desktop\GameDevChat\GameDevChat-.net\ChatApplication\bin\RabbitMQ.Client.xml
 C:\Users\karol\Desktop\GameDevChat\GameDevChat-.net\ChatApplication\bin\System.Web.Helpers.xml
 C:\Users\karol\Desktop\GameDevChat\GameDevChat-.net\ChatApplication\bin\System.Web.Mvc.xml
@@ -362,12 +359,6 @@ C:\Users\karol\Desktop\GameDevChat\GameDevChat-.net\ChatApplication\bin\System.W
 C:\Users\karol\Desktop\GameDevChat\GameDevChat-.net\ChatApplication\bin\System.Web.WebPages.Deployment.xml
 C:\Users\karol\Desktop\GameDevChat\GameDevChat-.net\ChatApplication\bin\System.Web.WebPages.Razor.xml
 C:\Users\karol\Desktop\GameDevChat\GameDevChat-.net\ChatApplication\bin\Antlr3.Runtime.pdb
-C:\Users\karol\Desktop\GameDevChat\GameDevChat-.net\ChatApplication\bin\de\Npgsql.resources.dll
-C:\Users\karol\Desktop\GameDevChat\GameDevChat-.net\ChatApplication\bin\es\Npgsql.resources.dll
-C:\Users\karol\Desktop\GameDevChat\GameDevChat-.net\ChatApplication\bin\fi\Npgsql.resources.dll
-C:\Users\karol\Desktop\GameDevChat\GameDevChat-.net\ChatApplication\bin\fr\Npgsql.resources.dll
-C:\Users\karol\Desktop\GameDevChat\GameDevChat-.net\ChatApplication\bin\ja\Npgsql.resources.dll
-C:\Users\karol\Desktop\GameDevChat\GameDevChat-.net\ChatApplication\bin\zh-CN\Npgsql.resources.dll
 C:\Users\karol\Desktop\GameDevChat\GameDevChat-.net\ChatApplication\obj\Debug\ChatApplication.csprojAssemblyReference.cache
 C:\Users\karol\Desktop\GameDevChat\GameDevChat-.net\ChatApplication\obj\Debug\ChatApplication.csproj.CoreCompileInputs.cache
 C:\Users\karol\Desktop\GameDevChat\GameDevChat-.net\ChatApplication\obj\Debug\ChatApplication.csproj.CopyComplete

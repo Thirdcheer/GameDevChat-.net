@@ -7,7 +7,7 @@ namespace ChatApplication.Models
 {
     public class UserModel
     {
-        public int userid { get; set; }
+        public int id { get; set; }
       
         public string username { get; set; }
         

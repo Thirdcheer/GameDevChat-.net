@@ -22,6 +22,12 @@ namespace ChatApplication.Hubs
         {
             rooms = new ChatRooms(servername);
         }
+
+        public bool checkRooms(string roomname, string servername)
+        {
+            getRooms(servername);
+            return rooms.Exists(roomname);
+        }
         
         public async Task Join(string roomName)
         {
@@ -143,6 +149,10 @@ namespace ChatApplication.Hubs
             if(from == 0)
             {
                 Clients.Client(connID).scrollDown();
+            }
+            if(messages.Count < 10)
+            {
+                lastid = -1;
             }
             
             return lastid;

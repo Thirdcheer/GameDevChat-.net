@@ -24,19 +24,19 @@ namespace ChatApplication.Models
             con.ConnectionString = ConfigurationManager.ConnectionStrings["test"].ConnectionString;
         }
 
-        public UserModel login(string username,string password)
+        public UserModel login(string email,string password)
         {
             UserModel user = new UserModel();
             DataTable dt = new DataTable();
             DataSet ds = new DataSet();
-            string sql = "select * from " + login_table +  " where username='" + username + "' and password='" + password + "'";
+            string sql = "select * from " + login_table +  " where email='" + email + "' and password='" + password + "'";
             NuoDbDataAdapter da = new NuoDbDataAdapter(sql, con);
             ds.Reset();
             da.Fill(ds);
             dt = ds.Tables[0];
             foreach (DataRow row in dt.Rows)
             {
-                user.userid = Convert.ToInt32(row["id"].ToString());
+                user.id = Convert.ToInt32(row["id"].ToString());
                 user.username = row["username"].ToString();
                 user.password = row["password"].ToString();
             }
@@ -69,7 +69,7 @@ namespace ChatApplication.Models
                 dt = ds.Tables[0];
                 foreach (DataRow row in dt.Rows)
                 {
-                    user.userid = Convert.ToInt32(row["id"].ToString());
+                    user.id = Convert.ToInt32(row["id"].ToString());
                 }
                 user.username = username;
        
@@ -87,7 +87,7 @@ namespace ChatApplication.Models
             UserModel user = getUser(username);
             
 
-            if (serverExists(name))
+            if (!serverExists(name))
             {
                 DataTable dt = new DataTable();
                 DataSet ds = new DataSet();
@@ -106,13 +106,13 @@ namespace ChatApplication.Models
                     server.id = Convert.ToInt32(row["id"].ToString());
                 }
 
-                nuocmd = new NuoDbCommand(String.Format("insert {0} (serverid, userid) values ('{1}', '{2}')", server_user_table, server.id, user.userid), con);
+                nuocmd = new NuoDbCommand(String.Format("insert {0} (serverid, userid) values ('{1}', '{2}')", server_user_table, server.id, user.id), con);
                 con.Open();
                 nuocmd.ExecuteNonQuery();
                 nuocmd = new NuoDbCommand(String.Format("update {0} set userrole = 'Admin' where username = '{1}'", login_table, user.username), con);
                 nuocmd.ExecuteNonQuery();
                 con.Close();
-                addRoom("general", server.name, 20);
+                addRoom("general", server.name);
                 return server;
             }
             else
@@ -156,7 +156,31 @@ namespace ChatApplication.Models
 
             foreach(DataRow row in dt.Rows)
             {
-                user.userid = Convert.ToInt32(row["id"]);
+                user.id = Convert.ToInt32(row["id"]);
+                user.username = row["username"].ToString();
+                user.role = row["userrole"].ToString();
+            }
+
+            return user;
+        }
+
+        public UserModel getUserByEmail(string email)
+        {
+
+            UserModel user = new UserModel();
+
+            DataTable dt = new DataTable();
+            DataSet ds = new DataSet();
+            string sql = String.Format("select * from {0} where email='{1}'", login_table, email);
+            NuoDbDataAdapter da = new NuoDbDataAdapter(sql, con);
+
+            ds.Reset();
+            da.Fill(ds);
+            dt = ds.Tables[0];
+
+            foreach (DataRow row in dt.Rows)
+            {
+                user.id = Convert.ToInt32(row["id"]);
                 user.username = row["username"].ToString();
                 user.role = row["userrole"].ToString();
             }
@@ -179,7 +203,7 @@ namespace ChatApplication.Models
 
             foreach (DataRow row in dt.Rows)
             {
-                user.userid = Convert.ToInt32(row["id"]);
+                user.id = Convert.ToInt32(row["id"]);
                 user.username = row["username"].ToString();
                 user.role = row["userrole"].ToString();
             }
@@ -215,7 +239,7 @@ namespace ChatApplication.Models
             UserModel user = getUser(username);
             DataTable dt = new DataTable();
             DataSet ds = new DataSet();
-            string sql = String.Format("select serverid from {0} where userid={1}", server_user_table, user.userid);
+            string sql = String.Format("select serverid from {0} where userid={1}", server_user_table, user.id);
             NuoDbDataAdapter da = new NuoDbDataAdapter(sql, con);
             ds.Reset();
             da.Fill(ds);
@@ -300,7 +324,7 @@ namespace ChatApplication.Models
             DataSet ds = new DataSet();
             ServerModel server = getUserServer(username);
             List<EventModel> eventsList = new List<EventModel>();
-            string sql = String.Format("select e.id, subject, description, startdate, enddate, themecolor, fullday, e.userid from {0} e join {1} s on e.userid = s.userid where s.serverid = {2}", events_table, server_user_table, server.id);
+            string sql = String.Format("select id, subject, description, startdate, enddate, color, fullday, serverid from {0} where serverid = {1}", events_table, server.id);
             NuoDbDataAdapter da = new NuoDbDataAdapter(sql, con);
             ds.Reset();
             da.Fill(ds);
@@ -313,9 +337,9 @@ namespace ChatApplication.Models
                 ev.description = row["description"].ToString();
                 ev.startdate = Convert.ToDateTime(row["startdate"]);
                 ev.enddate = Convert.ToDateTime(row["enddate"]);
-                ev.themecolor = row["themecolor"].ToString();
+                ev.color = row["color"].ToString();
                 ev.fullday = Convert.ToBoolean(row["fullday"]);
-                ev.userid = Convert.ToInt32(row["userId"]);
+                ev.serverid = Convert.ToInt32(row["serverid"]);
                 eventsList.Add(ev);
             }
 
@@ -347,9 +371,9 @@ namespace ChatApplication.Models
                     ev.description = row["description"].ToString();
                     ev.startdate = Convert.ToDateTime(row["startdate"]);
                     ev.enddate = Convert.ToDateTime(row["enddate"]);
-                    ev.themecolor = row["themecolor"].ToString();
+                    ev.color = row["color"].ToString();
                     ev.fullday = Convert.ToBoolean(row["fullday"]);
-                    ev.userid = Convert.ToInt32(row["userId"]);
+                    ev.serverid = Convert.ToInt32(row["serverid"]);
                 }
                 return ev;
             }
@@ -357,7 +381,7 @@ namespace ChatApplication.Models
 
         public void updateEvent(EventModel ev)
         {
-            NuoDbCommand nuocmd = new NuoDbCommand(String.Format("update {0} set subject = '{2}', startdate = '{3}', enddate='{4}', description='{5}', fullday='{6}', themecolor='{7}', userid='{8}' where {0}.id = {1}", events_table, ev.id, ev.subject, ev.startdate, ev.enddate, ev.description, ev.fullday, ev.themecolor, ev.userid), con);
+            NuoDbCommand nuocmd = new NuoDbCommand(String.Format("update {0} set subject = '{2}', startdate = '{3}', enddate='{4}', description='{5}', fullday='{6}', color='{7}', serverid='{8}' where {0}.id = {1}", events_table, ev.id, ev.subject, ev.startdate, ev.enddate, ev.description, ev.fullday, ev.color, ev.serverid), con);
             con.Open();
             nuocmd.ExecuteNonQuery();
             con.Close();
@@ -365,7 +389,7 @@ namespace ChatApplication.Models
 
         public void addEvent(EventModel ev)
         {
-            NuoDbCommand nuocmd = new NuoDbCommand(String.Format("insert {0} (subject, startdate, enddate, description, fullday, themecolor, userid) values ('{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}')", events_table, ev.subject, ev.startdate, ev.enddate, ev.description, ev.fullday, ev.themecolor, ev.userid), con);
+            NuoDbCommand nuocmd = new NuoDbCommand(String.Format("insert {0} (subject, startdate, enddate, description, fullday, color, serverid) values ('{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}')", events_table, ev.subject, ev.startdate, ev.enddate, ev.description, ev.fullday, ev.color, ev.serverid), con);
             con.Open();
             nuocmd.ExecuteNonQuery();
             con.Close();
@@ -405,7 +429,7 @@ namespace ChatApplication.Models
                     server.name = row["name"].ToString();
                 }
 
-                NuoDbCommand nuocmd = new NuoDbCommand(String.Format("insert {0} (serverid, userid) values ('{1}', '{2}')", server_user_table, server.id, user.userid), con);
+                NuoDbCommand nuocmd = new NuoDbCommand(String.Format("insert {0} (serverid, userid) values ('{1}', '{2}')", server_user_table, server.id, user.id), con);
                 con.Open();
                 nuocmd.ExecuteNonQuery();
                 con.Close();
@@ -455,13 +479,12 @@ namespace ChatApplication.Models
                 room.name = row["name"].ToString() + "-" + servername;
                 room.id = Convert.ToInt32(row["id"]);
                 room.serverId = Convert.ToInt32(row["serverid"]);
-                room.capacity = Convert.ToInt32(row["capacity"]);
             }
 
             return room;
         }
 
-        public RoomModel addRoom(string name, string serverName, int capacity)
+        public RoomModel addRoom(string name, string serverName)
        {
             ServerModel server = getServer(serverName);
             UserModel user = new UserModel();
@@ -476,12 +499,12 @@ namespace ChatApplication.Models
             da.Fill(ds);
             dt = ds.Tables[0];
 
-            foreach (DataRow row in dt.Rows)
+            /*foreach (DataRow row in dt.Rows)
             {
-                roomNames.Add(row["name"].ToString());
-            }
+                roomNames.Add(row["name"].ToString().Replace("-"+serverName, ""));
+            }*/
 
-            if (roomNames.Contains(name))
+            if (roomNames.Contains(name + "-" + serverName))
             {
                 return null;
             }
@@ -489,7 +512,7 @@ namespace ChatApplication.Models
             {
                 room.name = name;
                 room.serverId = server.id;
-                NuoDbCommand nuocmd = new NuoDbCommand(String.Format("insert {0} (name, capacity, serverid) values ('{1}', '{2}', '{3}')", room_table, name, capacity, server.id), con);
+                NuoDbCommand nuocmd = new NuoDbCommand(String.Format("insert {0} (name, serverid) values ('{1}', '{2}')", room_table, name, server.id), con);
                 con.Open();
                 nuocmd.ExecuteNonQuery();
                 con.Close();
@@ -511,7 +534,7 @@ namespace ChatApplication.Models
             foreach (DataRow row in dt.Rows)
             {
                 UserModel user = new UserModel();
-                user.userid = Convert.ToInt32(row["id"].ToString());
+                user.id = Convert.ToInt32(row["id"].ToString());
                 user.username = row["username"].ToString();
                 user.password = row["password"].ToString();
                 user.role = row["userrole"].ToString();
@@ -528,7 +551,7 @@ namespace ChatApplication.Models
             RoomModel room = getRoom(roomname.Replace(server.name, ""), server.name);
             DataTable dt = new DataTable();
             DataSet ds = new DataSet();
-            NuoDbCommand nuocmd = new NuoDbCommand(String.Format("insert {0} (roomid, message, msgdate, senderid) values ('{1}', '{2}', '{3}', '{4}')", messages_table, room.id, message, DateTime.Now, user.userid ), con);
+            NuoDbCommand nuocmd = new NuoDbCommand(String.Format("insert {0} (roomid, message, msgdate, senderid) values ('{1}', '{2}', '{3}', '{4}')", messages_table, room.id, message, DateTime.Now, user.id ), con);
             con.Open();
             nuocmd.ExecuteNonQuery();
             con.Close();
@@ -594,10 +617,10 @@ namespace ChatApplication.Models
             List<MessageModel> messagesList = new List<MessageModel>();
             if(id == 0)
             {
-                id = getMessagesLastRow(roomname, servername);
+                id = getMessagesLastRow(roomname, servername) + 1;
             }
 
-            string sql = String.Format("select * from {0} where {0}.roomid = {1} and {0}.id <= {2} order by {0}.id desc limit {3}", messages_table, room.id, id, count);
+            string sql = String.Format("select * from {0} where {0}.roomid = {1} and {0}.id < {2} order by {0}.id desc limit {3}", messages_table, room.id, id, count);
             NuoDbDataAdapter da = new NuoDbDataAdapter(sql, con);
             ds.Reset();
             da.Fill(ds);

@@ -394,6 +394,8 @@
     </Compile>
     <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Hubs\ChatRooms.cs" />
+    <Compile Include="Index.cs" />
+    <Compile Include="Login.cs" />
     <Compile Include="Models\DataLayer.cs" />
     <Compile Include="Models\EventModel.cs" />
     <Compile Include="Models\MessageModel.cs" />
@@ -402,6 +404,7 @@
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\UserRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Register.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -413,10 +416,11 @@
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\css\calendar.css" />
-    <Content Include="Content\css\jquery-ui-timepicker-addon.css" />
+    <Content Include="Content\images\pusheen.jpg" />
+    <Content Include="Content\pull-out.mp3" />
+    <Content Include="Content\styles\calendar.css" />
+    <Content Include="Content\styles\jquery-ui-timepicker-addon.css" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="Content\js\jquery-ui-timepicker-addon.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -526,6 +530,8 @@
     <Content Include="Content\bootstrap\alerts.less" />
     <Content Include="Content\_bootstrap-datetimepicker.less" />
     <Content Include="Content\bootstrap-datetimepicker-build.less" />
+    <Content Include="ClassDiagram1.cd" />
+    <None Include="Properties\PublishProfiles\GameDevChat - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -557,13 +563,12 @@
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Content\css\base.css" />
-    <Content Include="Content\css\chat.css" />
-    <Content Include="Content\css\registration_forms.css" />
-    <Content Include="Content\css\sidebar.css" />
+    <Content Include="Content\styles\base.css" />
+    <Content Include="Content\styles\chat.css" />
+    <Content Include="Content\styles\registration_forms.css" />
+    <Content Include="Content\styles\sidebar.css" />
     <Content Include="Content\images\cat.jpg" />
     <Content Include="Content\images\color-palette.png" />
-    <Content Include="Content\js\main.js" />
     <Content Include="Content\js\sidebar.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

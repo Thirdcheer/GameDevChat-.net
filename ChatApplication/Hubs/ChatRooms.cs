@@ -8,7 +8,7 @@ namespace ChatApplication.Hubs
 {
     public class ChatRooms
     {
-        static List<string> rooms;
+        List<string> rooms;
         DataLayer dl = new DataLayer();
         string servername = "";
         public ChatRooms(string servername)

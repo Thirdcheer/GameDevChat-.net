@@ -12,8 +12,8 @@ namespace ChatApplication.Models
         public string description { get; set; }
         public DateTime startdate { get; set; }
         public DateTime enddate { get; set; }
-        public string themecolor { get; set; }
+        public string color { get; set; }
         public bool fullday { get; set; }
-        public int userid { get; set; }
+        public int serverid { get; set; }
     }
 }

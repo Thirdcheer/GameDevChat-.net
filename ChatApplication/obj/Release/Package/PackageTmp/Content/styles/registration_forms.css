@@ -8,7 +8,7 @@ body{
 }
 
 .banner-photo{
-    background:url("../images/cat.jpg")  no-repeat left bottom;
+    background:url("../images/login-back3.jpg")  no-repeat left bottom;
     background-size:cover;
     min-height:500px;
     border-radius: 0 10px 10px 0;

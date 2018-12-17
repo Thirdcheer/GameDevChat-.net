@@ -210,10 +210,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Start</label>
-                                    <div class="input-group date" id="dtp1">
                                         <input type="datetime-local" id="txtStart" class="form-control" size="15" />
-
-                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="checkbox">
@@ -229,16 +226,6 @@
                                 <div class="form-group">
                                     <label>Description</label>
                                     <textarea id="txtDescription" rows="3" class="form-control" maxlength="300"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label>Theme Color</label>
-                                    <select id="ddThemeColor" class="form-control">
-                                        <option value="">Default</option>
-                                        <option value="red">Red</option>
-                                        <option value="blue">Blue</option>
-                                        <option value="black">Black</option>
-                                        <option value="green">Green</option>
-                                    </select>
                                 </div>
                                 <button type="button" id="btnSave" class="btn float-right">Save</button>
                             </form>
@@ -757,7 +744,7 @@
 
                                 $('#modal-update #eventTitle').text(calEvent.title);
                                 $('#modal-update #start').text(calEvent.start.format('dddd, MMMM Do YYYY HH:mm'));
-                                $('#modal-update #end').text(calEvent.end.format('dddd, MMMM Do YYYY HH:mm'));
+                                $('#modal-update #end').text(event.end != null ? event.end.format('dddd, MMMM Do YYYY HH:mm') : null);
                                 //console.log(calEvent.start.toDate());
                                 $('#modal-update #desc').text(calEvent.description);
                                 $('#modal-update').modal();
@@ -834,16 +821,17 @@
                         if (selectedEvent != null) {
                             $('#hdEventID').val(selectedEvent.eventID);
                             $('#txtSubject').val(selectedEvent.title);
-                            $('#txtStart').val(moment(selectedEvent.start).format('dddd, MMMM Do YYYY HH:mm'));
+
                             $('#chkIsFullDay').prop("checked", selectedEvent.allDay || false);
                             $('#chkIsFullDay').change();
-                            $('#txtEnd').val(selectedEvent.end != null ? moment(selectedEvent.end).format('dddd, MMMM Do YYYY HH:mm') : '');
                             $('#txtDescription').val(selectedEvent.description);
                             $('#ddThemeColor').val(selectedEvent.color);
 
                             $('#modal-update').modal('hide');
                             $('#modal-save').modal();
                             $('#modal-save #event-preview').empty();
+                            $('#txtStart').val('');
+                            $('#txtEnd').val('');;
 
                             //console.log(selectedEvent);
 
@@ -854,14 +842,14 @@
                                     '<label><b>End</b></label> <br/>' +
                                     '<p id="end"></p> <br /></div>');
 
-
                                 $('#modal-save #start').text(selectedEvent.start.format('dddd, MMMM Do YYYY HH:mm'));
-                                $('#modal-save #end').text(selectedEvent.end.format('dddd, MMMM Do YYYY HH:mm'));
+                                $('#modal-save #end').text(selectedEvent.end != null ? moment(selectedEvent.end).format('dddd, MMMM Do YYYY HH:mm') : '');
                                 $('#modal-save .modal-title').text(selectedEvent.title);
                             }
                             else {
 
                                 $('#modal-save .modal-title').text("Save event");
+
                             }
                         }
                         else {
@@ -870,7 +858,9 @@
                             $('#modal-save #event-preview').empty();
                             $('#modal-save .modal-title').text("Save event");
                         }
-                        
+                        console.log(new Date(selectedEvent.start).toISOString().slice(0, 16));
+                        $("#txtStart").val(moment(selectedEvent.start).toDate().toISOString().slice(0, 16));
+                        $("#txtEnd").val(selectedEvent.end != null ? new Date(selectedEvent.end).toISOString().slice(0, 16) : '');
                     };
 
                     $('#modal-save').on('hidden.bs.modal', function () {
@@ -879,7 +869,6 @@
                     })
 
                     $('#btnSave').click(function () {
-                        //Validation/
                         if ($('#txtSubject').val().trim() == "") {
                             alert('Subject required');
                             return;
